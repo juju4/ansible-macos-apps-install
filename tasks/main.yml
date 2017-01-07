@@ -1,0 +1,7 @@
+---
+
+- fail: msg="This role is only compatible with Darwin/MacOS"
+  when: ansible_os_family != 'Darwin'
+
+- include: darwin.yml
+

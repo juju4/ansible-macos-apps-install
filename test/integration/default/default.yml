@@ -1,0 +1,34 @@
+---
+
+- hosts: all
+#- hosts: test-kitchen
+  vars:
+    macos_apps_install_list:
+      - { u: 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=fr', f: 'firefox-50.1.0-SSL-fr.dmg', v: true, s: '63c561051b1846f110ea60446a6578991a84d169e07dcfe1f4ea35aa4ca20e2a', n: 'Firefox', t: 'app', version: '50.1.0' }
+      - { u: 'https://download.mozilla.org/?product=thunderbird-45.5.1-SSL&os=osx&lang=fr', f: 'thunderbird-45.5.1-SSL-fr.dmg', v: true, s: 'e886a2e38f71d9e63f010bb39a5ccc15d799ffd0df65b4bf72d218aa76fa06c5', n: 'Thunderbird', t: 'app', version: '45.5.1' }
+      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: '144acfbf16e94a6b2d2653b9bf2fafd1059e1f49e4b4ec8c47097451dc80c6f9', n: 'Google Chrome', t: 'app', version: '55.0' }
+      - { u: "https://download.documentfoundation.org/libreoffice/stable/5.2.3/mac/x86_64/LibreOffice_5.2.3_MacOS_x86-64.dmg", v: true, s: '7f842a38e00312b6283341af3323433558bc155495cf54206dc88a5dd3abe277', n: 'LibreOffice', t: 'app', version: '5.2.3' }
+      - { u: 'http://get.videolan.org/vlc/2.2.4/macosx/vlc-2.2.4.dmg', v: true, s: 'fd071b9817c9efccac5a144d69893a4a5323cbde4a74d5691c3cf3ab979d4160', n: 'VLC', t: 'app', m: '/Volumes/vlc-2.2.4', version: '2.2.4' }
+      - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg', v: true, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9', n: 'ClipMenu', t: 'app', version: '0.4.3' }
+      - { u: 'http://download.virtualbox.org/virtualbox/5.1.10/VirtualBox-5.1.10-112026-OSX.dmg', v: false, s: '3500f07be9f5e27a08c00cc626981230bdaf639f6fad0b82ecf731a0580cccef', n: 'VirtualBox', t: 'pkg', version: '5.1.10' }
+      - { u: 'https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1.dmg', v: true, s: '17191ff7a1d796aa89c558b45c706288275dade6a65e2b219c2efa0e54c02ef7', n: 'Vagrant', t: 'pkg', version: '1.9.1', versioncmd: '/opt/vagrant/bin/vagrant --version | sed "s@Vagrant @@;"', to: '/opt/vagrant/bin/vagrant' }
+      - { u: 'https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg', v: true, s: '32e50e8f1e21542b847041711039fa78d44febfed466f834a9281c44d75cd6c3', n: 'XQuartz', t: 'pkg', m: '/Volumes/XQuartz-2.7.11', version: '2.7.11', to: '/Applications/Utilities/XQuartz.app' }
+      - { u: 'https://1.na.dl.wireshark.org/osx/Wireshark%202.2.3%20Intel%2064.dmg', f: 'Wireshark-2.2.3-Intel-64.dmg', v: true, s: '300195804c9545a75632c191fb1c5491f18e314b01178a2abe18faab78c8e150', n: 'Wireshark', t: 'pkg', version: '2.2.3', exec_name: 'Wireshark 2.2.3 Intel 64.pkg' }
+      - { u: 'http://javadl.oracle.com/webapps/download/AutoDL?BundleId=216425', f: 'jre-8u111-macosx-x64.dmg', v: true, s: '7bf4fa0ae923ccf0392d8561ae04a76ad075676ad6d4a68283d7de7e60b9a1d5', n: 'Java 8 Update 111', t: 'app', version: '1.8.111', plist_tag: 'CFBundleVersion' }
+      - { u: 'https://download.docker.com/mac/stable/Docker.dmg', v: true, s: 'cee1a02680399f21f42464b31473ce36629152c4771ecb8cf928b47a9d17bcac', n: 'Docker', t: 'app', m: '/Volumes/Docker', version: '1.12.0', versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleShortVersionString" /Applications/Docker.app/Contents/Info.plist', to: '/Applications/Docker.app' }
+  ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+  #    - { u: 'https://storage.googleapis.com/prey_public/prey-releases/node-client/1.6.5/prey-mac-1.6.5-x86.pkg', v: true, s: 'd343a28e63f58a079c8698d308d230565ab4d5ca04a064aebe7ab4ba25a8ed07', n: 'Prey', t: 'pkgonly', version: '1.6.5', env: "env API_KEY={{ prey_apikey }}", to: '/usr/local/lib/prey/current/bin/prey', versioncmd: '/usr/local/lib/prey/current/bin/prey --version' }
+  ## osxfuse is required for veracrypt
+      - { u: 'https://github.com/osxfuse/osxfuse/releases/download/osxfuse-3.5.4/osxfuse-3.5.4.dmg', v: true, s: '6c8f48ff1f67db41ece2a042a2649b875d12f7ed6ee0b50d08eebae26c46c5ca', n: 'FUSE', t: 'pkg', m: '/Volumes/FUSE for macOS', version: '3.5.4', to: '/Library/Filesystems/osxfuse.fs', exec_name: 'FUSE for macOS.pkg' }
+      - { u: 'https://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=veracrypt&DownloadId=1614080&FileTime=131212015497000000&Build=21031', f: 'VeraCrypt_1.19.dmg', v: true, s: 'da098bba200d2cebb193bd699eef6dec7834c8eeb579ed40bcd21d45487e6ce7', n: 'VeraCrypt', t: 'pkg', m: '/Volumes/VeraCrypt for OSX', version: '1.19', exec_name: 'VeraCrypt_Installer.pkg' }
+      - { u: 'http://download.ap.bittorrent.com/track/stable/endpoint/utmac/os/osx', f: 'uTorrent-1.8.7.dmg', v: true, s: 'd360be5abb67b85cac1f345c645ce709cc062b7e632a5f07be29be1bd24e07db', n: 'uTorrent', t: 'app', m: '/Volumes/uTorrent-43001', version: '1.8.7' }
+      - { u: 'https://download.teamviewer.com/download/TeamViewer.dmg', f: 'TeamViewer-12.0.72647.dmg', v: true, s: '1dc2dda560dc8a70b6478e7e88b1c64d9b0f6a8db24c8d165c2b2e14e2de55ee', n: 'TeamViewer', t: 'pkg', version: '12.0.72647', exec_name: 'Install TeamViewer.pkg' }
+      - { u: 'https://github.com/google/santa/releases/download/0.9.14/santa-0.9.14.dmg', v: true, s: '51e177590a037bdb032883af09789e4462b97f3d54f150b9a471f6db510b1bb6', n: 'santa-0.9.14', t: 'pkg', version: '0.9.14', versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"', to: '/usr/local/bin/santactl' }
+      - { u: 'https://osquery-packages.s3.amazonaws.com/darwin/osquery-2.1.2.pkg', v: true, s: 'c6d5cf4614680d969df5ca0af4bd193f0039429c3a7e11b9ef015f6efcc77c83', n: 'osquery', t: 'pkgonly', version: '2.1.2', versioncmd: '/usr/local/bin/osqueryi --version | sed "s/osqueryi version //"', to: '/usr/local/bin/osqueryi' }
+      - { u: 'https://github.com/alterstep/dnscrypt-osxclient/releases/download/1.0.12/dnscrypt-osxclient-1.0.12.dmg', v: true, s: 'f3badcc535933cfc7bdae7b0cb1e0f7d89a46d1fb085f4f3baff3b8d4f38a797', n: 'DNSCrypt', t: 'app', m: '/Volumes/dnscrypt-pkg', version: '1.0.12', versioncmd: '', to: '/Applications/DNSCrypt Menubar.app' }
+      - { u: 'http://www.parallels.com/directdownload/pd12', f: 'ParallelsDesktop-12.1.1-41491.dmg', v: true, s: '30c3e8f0677ec2a1bad7f8ff05867dbb02a2246545d9ea0d25ff6f1aff8e83af', n: 'Parallels Desktop', t: 'app', version: '12.1.1', m: '/Volumes/Parallels Desktop 12'  }
+#      - { u: '', f: '', v: true, s: 'aaaa', n: '', t: 'app', m: '/Volumes/app', version: '', versioncmd: '', to: '/Applications/example.app' }
+
+  roles:
+    - juju4.macos-apps-install
+

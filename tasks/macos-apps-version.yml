@@ -1,0 +1,56 @@
+---
+
+## it seems we can't change here variables passed to include yml file, so we mirror them
+- set_fact:
+    version_app_default2: "{{ version_app_default }}"
+  when: version_app_default != ''
+- set_fact:
+    version_app_default2: '0.01'
+  when: version_app_default == ''
+- set_fact:
+    version_app_plist_tag2: "{{ version_app_plist_tag }}"
+  when: version_app_plist_tag != ''
+- set_fact:
+    version_app_plist_tag2: 'CFBundleShortVersionString'
+  when: version_app_plist_tag == ''
+- set_fact:
+    version_app_cmd2: "{{ version_app_cmd }}"
+  when: version_app_cmd != ''
+- set_fact:
+    version_app_cmd2: ''
+  when: version_app_cmd == ''
+
+- block:
+    - debug: var=version_app_cmd
+    - debug: var=version_app_default2
+    - debug: var=version_app_plist_tag2
+  when: verbose is defined and verbose
+
+- block:
+    - name: check if Info.plist exists
+      stat: path="{{ version_app_path }}/Contents/Info.plist"
+      register: infoplist
+    - name: try to recover version from Info.plist
+      set_fact:
+        version_app_cmd2: "/usr/libexec/PlistBuddy -c \"print :{{ version_app_plist_tag2 }}\" \"{{ version_app_path }}/Contents/Info.plist\""
+      when: infoplist.stat.exists
+    - name: force update/install if no version cmd
+      set_fact:
+        version_app_cmd2: "echo {{ version_app_default2 }}"
+      when: not infoplist.stat.exists
+  when: version_app_cmd2 is not defined or version_app_cmd2 == ''
+
+- name: get version of app {{ version_app_path }}
+  shell: "{{ version_app_cmd2 }}"
+  register: version_app_shell
+  changed_when: false
+  ignore_errors: true
+  when: app.stat.exists and version_app_cmd2 != ''
+
+- set_fact:
+    version_app: "{{ version_app_shell.stdout }}"
+  when: version_app_shell.stdout is defined and version_app_shell.stdout != ''
+- set_fact:
+    version_app: "{{ version_app_default }}"
+  when: not (version_app_shell.stdout is defined and version_app_shell.stdout != '')
+

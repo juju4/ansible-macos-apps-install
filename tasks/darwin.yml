@@ -1,0 +1,27 @@
+---
+
+- debug: var=macos_apps_install_list
+  when: verbose
+
+- name: ensure download directory exists
+  file:
+    dest: "{{ install_archives }}"
+    state: directory
+    mode: '0755'
+
+- name: download macos applications
+  get_url:
+    url: "{{ item.u }}"
+    dest: "{{ install_archives }}/{{ item.f | default(item.u | basename) }}"
+    mode: '0644'
+    validate_certs: "{{ item.v }}"
+    sha256sum: "{{ item.s }}"
+    tmp_dest: /tmp/
+  with_items: "{{ macos_apps_install_list }}"
+
+- name: install macos applications
+#  include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_path={{ item.m | default('/Volumes/{{ item.n }}') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('/Applications/{{ item.n }}.app') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }}"
+  include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_pathi={{ item.m | default('') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }} plist_tag={{ item.plist_tag | default('') }}"
+  with_items: "{{ macos_apps_install_list }}"
+  become: yes
+

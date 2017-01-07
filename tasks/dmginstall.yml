@@ -1,0 +1,43 @@
+---
+## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
+## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
+
+- name: check if dmg is mounted in '{{ mount_path }}'
+  stat: path={{ mount_path }}
+  register: mounted
+- name: Mount dmg image for {{ app_name }}
+  command: "hdiutil attach {{ downloads }}/{{ app_dmg }}"
+  when: not mounted.stat.exists and installer_type is defined and installer_type != 'pkgonly'
+
+- block:
+    - set_fact:
+        app_basename: "{{ app_name }}.app"
+    - set_fact:
+        app_basename: "{{ exec_name }}"
+      when: exec_name is defined and exec_name != ''
+    - name: Remove existing app if present
+      file: path=/Applications/{{ app_basename }} state=absent
+    - name: Copy {{ app_name }} app to Applications directory
+      command: "cp -R '{{ mount_path }}/{{ app_basename }}' /Applications/"
+  when: installer_type is defined and installer_type == 'app'
+
+- block:
+    - set_fact:
+        pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
+    - set_fact:
+        pkg_path: "{{ mount_path }}/{{ exec_name }}"
+      when: exec_name is defined and exec_name != ''
+    - set_fact:
+        pkg_path: "{{ downloads }}/{{ app_dmg }}"
+      when: installer_type is defined and installer_type == 'pkgonly'
+## Note: env allow to pass variables like API_key for http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+    - name: Install {{ app_name }} pkg
+      shell: "{{ env }} installer -package '{{ pkg_path }}' -target /"
+      when: installer_type is defined and (installer_type == 'pkg' or installer_type == 'pkgonly')
+      become: yes
+      ignore_errors: true
+
+- name: Unmount {{ app_name }} image
+  command: "hdiutil detach '{{ mount_path }}'"
+  when: installer_type is defined and installer_type != 'pkgonly'
+
