@@ -9,18 +9,27 @@
     state: directory
     mode: '0755'
 
+## https://github.com/ansible/ansible/issues/18894
+- name: Bug workaround - https://github.com/ansible/ansible/issues/18894
+  pip: name={{ item }} state=present executable=/opt/local/bin/pip
+  with_items:
+    - requests>=2.12
+    - urllib3>=1.19
+## NOK Macos: {"cmd": "/opt/local/bin/pip install ndg-httpsclient>=0.4.2 state=present", "failed": true, "item": "ndg-httpsclient>=0.4.2", "msg": "stdout: Collecting ndg-httpsclient>=0.4.2 state=present\n\n:stderr:   Could not find a version that satisfies the requirement ndg-httpsclient>=0.4.2 state=present (from versions: 0.1.0, 0.2.0, 0.3.0, 0.3.1, 0.3.2, 0.3.3, 0.4.0, 0.4.1, 0.4.2)\nNo matching distribution found for ndg-httpsclient>=0.4.2 state=present\n"}
+#    - ndg-httpsclient>=0.4.2
+
 - name: download macos applications
   get_url:
     url: "{{ item.u }}"
     dest: "{{ install_archives }}/{{ item.f | default(item.u | basename) }}"
     mode: '0644'
-    validate_certs: "{{ item.v }}"
-    sha256sum: "{{ item.s }}"
+    validate_certs: "{{ item.v | default(true) }}"
+    sha256sum: "{{ item.s | default('sha256:unknown') }}"
     tmp_dest: /tmp/
   with_items: "{{ macos_apps_install_list }}"
 
 - name: install macos applications
-#  include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_path={{ item.m | default('/Volumes/{{ item.n }}') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('/Applications/{{ item.n }}.app') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }}"
+#  include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v | default(true) }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_path={{ item.m | default('/Volumes/{{ item.n }}') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('/Applications/{{ item.n }}.app') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }}"
   include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_pathi={{ item.m | default('') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }} plist_tag={{ item.plist_tag | default('') }}"
   with_items: "{{ macos_apps_install_list }}"
   become: yes
