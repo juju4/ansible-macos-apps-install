@@ -11,7 +11,7 @@
 
 ## https://github.com/ansible/ansible/issues/18894
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
-  pip: name={{ item }} state=present executable=/opt/local/bin/pip
+  pip: name={{ item }} state=present executable={{ pip_path }}
   with_items:
     - requests>=2.12
     - urllib3>=1.19

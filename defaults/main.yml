@@ -9,4 +9,8 @@ macos_apps_install_list:
     - { u: 'http://download.virtualbox.org/virtualbox/5.1.10/VirtualBox-5.1.10-112026-OSX.dmg', v: false, s: '3500f07be9f5e27a08c00cc626981230bdaf639f6fad0b82ecf731a0580cccef', n: 'VirtualBox', t: 'pkg', version: '5.1.10' }
 #    - { u: '', f: '', v: true, s: 'aaaa', n: '', t: 'app', m: '/Volumes/app', version: '', versioncmd: '', to: '/Applications/example.app' }
 
+## macports
+pip_path: /opt/local/bin/pip
+## homebrew
+#pip_path: /usr/local/bin/pip
 
