@@ -1,6 +1,7 @@
 ---
 ## Travis configuration
 
+- debug: var=ansible_env
 - set_fact:
     pip_path: /usr/local/bin/pip
   when: ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true'
