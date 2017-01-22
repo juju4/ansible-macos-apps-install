@@ -8,6 +8,8 @@ os:
 before_install:
  - ln -s ansible-macos-apps-install ../juju4.macos-apps-install
 install:
+  - sw_vers
+  - uname -a
   - python --version
   - brew update
   - which pip
