@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/juju4/ansible-macos-apps-install.svg?branch=master)](https://travis-ci.org/juju4/ansible-macos-apps-install)
+[![Build Status - Master](https://travis-ci.org/juju4/ansible-macos-apps-install.svg?branch=master)](https://travis-ci.org/juju4/ansible-macos-apps-install)
+[![Build Status - Devel](https://travis-ci.org/juju4/ansible-macos-apps-install.svg?branch=devel)](https://travis-ci.org/juju4/ansible-macos-apps-install/branches)
 # MacOS Applications installation ansible role
 
 Ansible role to setup a list of mac applications be it dmg or pkg format.
