@@ -6,7 +6,7 @@
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=fr', f: 'firefox-50.1.0-SSL-fr.dmg', v: true, s: '63c561051b1846f110ea60446a6578991a84d169e07dcfe1f4ea35aa4ca20e2a', n: 'Firefox', t: 'app', version: '50.1.0' }
       - { u: 'https://download.mozilla.org/?product=thunderbird-45.5.1-SSL&os=osx&lang=fr', f: 'thunderbird-45.5.1-SSL-fr.dmg', v: true, s: 'e886a2e38f71d9e63f010bb39a5ccc15d799ffd0df65b4bf72d218aa76fa06c5', n: 'Thunderbird', t: 'app', version: '45.5.1' }
-      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: '144acfbf16e94a6b2d2653b9bf2fafd1059e1f49e4b4ec8c47097451dc80c6f9', n: 'Google Chrome', t: 'app', version: '55.0' }
+#      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: 'fe1b76904d9c566ca1cf7e21da3a6d35b5c293aece524b76dfc8b876ae7e8062', n: 'Google Chrome', t: 'app', version: '56.0' }
       - { u: "https://download.documentfoundation.org/libreoffice/stable/5.2.3/mac/x86_64/LibreOffice_5.2.3_MacOS_x86-64.dmg", v: true, s: '7f842a38e00312b6283341af3323433558bc155495cf54206dc88a5dd3abe277', n: 'LibreOffice', t: 'app', version: '5.2.3' }
       - { u: 'http://get.videolan.org/vlc/2.2.4/macosx/vlc-2.2.4.dmg', v: true, s: 'fd071b9817c9efccac5a144d69893a4a5323cbde4a74d5691c3cf3ab979d4160', n: 'VLC', t: 'app', m: '/Volumes/vlc-2.2.4', version: '2.2.4' }
       - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg', v: true, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9', n: 'ClipMenu', t: 'app', version: '0.4.3' }
@@ -27,7 +27,6 @@
       - { u: 'https://github.com/google/santa/releases/download/0.9.14/santa-0.9.14.dmg', v: true, s: '51e177590a037bdb032883af09789e4462b97f3d54f150b9a471f6db510b1bb6', n: 'santa-0.9.14', t: 'pkg', version: '0.9.14', versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"', to: '/usr/local/bin/santactl' }
       - { u: 'https://osquery-packages.s3.amazonaws.com/darwin/osquery-2.1.2.pkg', v: true, s: 'c6d5cf4614680d969df5ca0af4bd193f0039429c3a7e11b9ef015f6efcc77c83', n: 'osquery', t: 'pkgonly', version: '2.1.2', versioncmd: '/usr/local/bin/osqueryi --version | sed "s/osqueryi version //"', to: '/usr/local/bin/osqueryi' }
       - { u: 'https://github.com/alterstep/dnscrypt-osxclient/releases/download/1.0.12/dnscrypt-osxclient-1.0.12.dmg', v: false, s: 'f3badcc535933cfc7bdae7b0cb1e0f7d89a46d1fb085f4f3baff3b8d4f38a797', n: 'DNSCrypt', t: 'pkg', m: '/Volumes/dnscrypt-pkg', version: '1.0.12', versioncmd: '', to: '/Applications/DNSCrypt Menubar.app' }
-      - { u: 'http://www.parallels.com/directdownload/pd12', f: 'ParallelsDesktop-12.1.2-41525.dmg', v: true, s: '80a05c985878f750595e7063b067868509e5ab2a2fe52cd614762acef9a175c0', n: 'Parallels Desktop', t: 'app', version: '12.1.2', m: '/Volumes/Parallels Desktop 12'  }
 #      - { u: '', f: '', v: true, s: 'aaaa', n: '', t: 'app', m: '/Volumes/app', version: '', versioncmd: '', to: '/Applications/example.app' }
 
   roles:
