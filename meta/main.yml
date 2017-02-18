@@ -10,7 +10,12 @@ galaxy_info:
   # platform on this list, let us know and we'll get it added!
   #
   platforms:
-  - name: MacOS
+  - name: MacOSX
+    versions:
+    - 10.9
+    - '10.10'
+    - '10.11'
+    - '10.12'
   #
   # Below are all categories currently available. Just as with
   # the platforms above, uncomment those that apply to your role.
