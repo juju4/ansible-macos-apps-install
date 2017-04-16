@@ -10,6 +10,9 @@
     mode: '0755'
 
 ## https://github.com/ansible/ansible/issues/18894
+- name: check if pip available
+  stat: path="{{ pip_path }}"
+  register: hasPip
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
   pip:
     name: "{{ item }}"
@@ -22,6 +25,7 @@
     - pyasn1>=0.1.9
 ## NOK Macos: {"cmd": "/opt/local/bin/pip install ndg-httpsclient>=0.4.2 state=present", "failed": true, "item": "ndg-httpsclient>=0.4.2", "msg": "stdout: Collecting ndg-httpsclient>=0.4.2 state=present\n\n:stderr:   Could not find a version that satisfies the requirement ndg-httpsclient>=0.4.2 state=present (from versions: 0.1.0, 0.2.0, 0.3.0, 0.3.1, 0.3.2, 0.3.3, 0.4.0, 0.4.1, 0.4.2)\nNo matching distribution found for ndg-httpsclient>=0.4.2 state=present\n"}
     - ndg-httpsclient>=0.4.2
+  when: hasPip.stat.exists
 
 - name: download macos applications
   get_url:

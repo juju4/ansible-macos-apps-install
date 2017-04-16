@@ -7,7 +7,7 @@
   register: mounted
 - name: Mount dmg image for {{ app_name }}
   command: "hdiutil attach {{ downloads }}/{{ app_dmg }}"
-  when: not mounted.stat.exists and installer_type is defined and installer_type != 'pkgonly'
+  when: not mounted.stat.exists and installer_type is defined and installer_type != 'pkgonly' and installer_type != 'zip'
 
 - block:
     - set_fact:
@@ -29,15 +29,22 @@
       when: exec_name is defined and exec_name != ''
     - set_fact:
         pkg_path: "{{ downloads }}/{{ app_dmg }}"
-      when: installer_type is defined and installer_type == 'pkgonly'
+      when: installer_type is defined and (installer_type == 'pkgonly' or installer_type == 'zip')
 ## Note: env allow to pass variables like API_key for http://help.preyproject.com/article/188-prey-unattended-install-for-computers
     - name: Install {{ app_name }} pkg
       shell: "{{ env }} installer -package '{{ pkg_path }}' -target /"
       when: installer_type is defined and (installer_type == 'pkg' or installer_type == 'pkgonly')
       become: yes
       ignore_errors: true
+    - name: Unarchive {{ app_name }}
+      unarchive:
+        src: "{{ pkg_path }}"
+        dest: /Applications
+      when: installer_type is defined and installer_type == 'zip'
+      become: yes
+      ignore_errors: true
 
 - name: Unmount {{ app_name }} image
   command: "hdiutil detach '{{ mount_path }}'"
-  when: installer_type is defined and installer_type != 'pkgonly'
+  when: installer_type is defined and installer_type != 'pkgonly' and installer_type != 'zip'
 
