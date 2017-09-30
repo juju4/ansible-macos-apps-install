@@ -28,7 +28,8 @@
       - { u: 'https://github.com/google/santa/releases/download/0.9.20/santa-0.9.20.dmg', v: true, s: 'dcfc535c97732380ce5a116f352110ca15ee7ebaef0eeb63b648148b21f5f3a4', n: 'santa-0.9.20', t: 'pkg', version: '0.9.20', versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"', to: '/usr/local/bin/santactl' }
       - { u: 'https://pkg.osquery.io/darwin/osquery-2.7.0.pkg', v: true, s: 'e5eaf91b5582252f136476391cdd17985cc614536f964f38ddf7eb9cb69d0213', n: 'osquery', t: 'pkgonly', version: '2.7.0', versioncmd: '/usr/local/bin/osqueryi --version | sed "s/osqueryi version //"', to: '/usr/local/bin/osqueryi' }
       - { u: 'https://github.com/alterstep/dnscrypt-osxclient/releases/download/1.0.14/dnscrypt-osxclient-1.0.14.dmg', v: true, s: '47da81eef9e04762e9db7141dc4fdb26681940ab747677b22af50ce79b2b48bf', n: 'DNSCrypt', t: 'pkg', m: '/Volumes/dnscrypt-pkg', version: '1.0.14', versioncmd: '', to: '/Applications/DNSCrypt Menubar.app' }
-      - { u: 'https://releases.gpgtools.org/GPG_Suite-2017.1.dmg', v: false, s: '01705da33b9dadaf5282d28f9ef58f2eb7cd8ff6f19b4ade78861bf87668a061' }
+## FIXME! 'Request failed: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:590)>' but certificate is letsencrypt/TLS1.2 support
+#      - { u: 'https://releases.gpgtools.org/GPG_Suite-2017.1.dmg', v: false, s: '01705da33b9dadaf5282d28f9ef58f2eb7cd8ff6f19b4ade78861bf87668a061' }
 #      - { u: '', f: '', v: true, s: 'aaaa', n: '', t: 'app', m: '/Volumes/app', version: '', versioncmd: '', to: '/Applications/example.app' }
 
   roles:
