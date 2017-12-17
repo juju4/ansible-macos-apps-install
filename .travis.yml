@@ -31,7 +31,7 @@ script:
   - "ansible-playbook -i inventory --syntax-check test/integration/default/default.yml"
 
 # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i inventory --connection=local --sudo -vvvv test/integration/default/default.yml"
+  - "ansible-playbook -i inventory --connection=local --sudo -vvvv test/integration/default/default.yml -vv"
 
 # Run the role/playbook again, checking to make sure it's idempotent.
 ## FIXME! known fail
