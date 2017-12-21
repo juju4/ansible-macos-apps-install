@@ -7,11 +7,21 @@ os:
 #python: "2.7"
 before_install:
  - ln -s ansible-macos-apps-install ../juju4.macos-apps-install
-install:
   - sw_vers
   - uname -a
   - python --version
   - brew update
+  - brew install libidn2
+  - brew install openssl
+  - brew upgrade openssl
+  - brew install python3
+  - brew doctor
+  - python --version
+#  - pip --version
+  - python -c "import ssl; print(ssl.OPENSSL_VERSION)"
+  - python3 --version
+  - python3 -c "import ssl; print(ssl.OPENSSL_VERSION)"
+  - pip3 --version
 #  - which pip
 ## error: could not create '/Library/Python/2.7/site-packages/ansible': Permission denied
 #  - pip install ansible ansible-lint
@@ -19,7 +29,9 @@ install:
   - env
   - find . -ls
 #  - find $HOME/Library $HOME/.local -ls || true
+install:
   - brew install ansible
+#  - pip3 install ansible
   - ansible --version
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 script:
