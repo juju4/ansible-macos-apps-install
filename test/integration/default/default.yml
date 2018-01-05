@@ -6,7 +6,7 @@
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-57.0.2-SSL&os=osx&lang=fr', f: 'firefox-57.0.2-SSL-fr.dmg', v: true, s: '1d384f50c65e8da3fad4450db2144a9ac0f281de5bd6bd82125711a1a8bbb8e8', n: 'Firefox', t: 'app', version: '57.0.2' }
       - { u: 'https://download.mozilla.org/?product=thunderbird-52.5.0-SSL&os=osx&lang=fr', f: 'thunderbird-52.5.0-SSL-fr.dmg', v: true, s: '8a0634729a35eb0284148ba49437775083627fcda6a96de2b6732b1c2c4cbabd', n: 'Thunderbird', t: 'app', version: '52.5.0' }
-      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: '40559d7688f05618e815e507fe885e3a97b725bdb8e37cf27dc3e6d3b4e221bc', n: 'Google Chrome', t: 'app', version: '63.0' }
+#      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: 'b91ce501fe9a290af9b9cde71ae42f072260365a6b5a8bf18c1e4d2d28d6c511', n: 'Google Chrome', t: 'app', version: '63.0' }
 #      - { u: "https://download.documentfoundation.org/libreoffice/stable/5.4.3/mac/x86_64/LibreOffice_5.4.3_MacOS_x86-64.dmg", v: true, s: '3d4ac4bce9b711e5aa74ee119085125537656dc64cdf9f67a958563c274e6e49', n: 'LibreOffice', t: 'app', version: '5.4.3' }
       - { u: 'http://get.videolan.org/vlc/2.2.8/macosx/vlc-2.2.8.dmg', v: false, s: '4406e025c566c5703ab11e53070d3e399680ddfb8994b60cb753079dffd2a027', n: 'VLC', t: 'app', m: '/Volumes/vlc-2.2.8', version: '2.2.8' }
 #      - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg', v: true, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9', n: 'ClipMenu', t: 'app', version: '0.4.3' }
