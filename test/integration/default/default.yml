@@ -8,7 +8,7 @@
       - { u: 'https://download.mozilla.org/?product=thunderbird-52.5.0-SSL&os=osx&lang=fr', f: 'thunderbird-52.5.0-SSL-fr.dmg', v: true, s: '8a0634729a35eb0284148ba49437775083627fcda6a96de2b6732b1c2c4cbabd', n: 'Thunderbird', t: 'app', version: '52.5.0' }
 #      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: 'b91ce501fe9a290af9b9cde71ae42f072260365a6b5a8bf18c1e4d2d28d6c511', n: 'Google Chrome', t: 'app', version: '63.0' }
 #      - { u: "https://download.documentfoundation.org/libreoffice/stable/5.4.3/mac/x86_64/LibreOffice_5.4.3_MacOS_x86-64.dmg", v: true, s: '3d4ac4bce9b711e5aa74ee119085125537656dc64cdf9f67a958563c274e6e49', n: 'LibreOffice', t: 'app', version: '5.4.3' }
-      - { u: 'http://get.videolan.org/vlc/2.2.8/macosx/vlc-2.2.8.dmg', v: false, s: '4406e025c566c5703ab11e53070d3e399680ddfb8994b60cb753079dffd2a027', n: 'VLC', t: 'app', m: '/Volumes/vlc-2.2.8', version: '2.2.8' }
+#      - { u: 'http://get.videolan.org/vlc/2.2.8/macosx/vlc-2.2.8.dmg', v: false, s: '4406e025c566c5703ab11e53070d3e399680ddfb8994b60cb753079dffd2a027', n: 'VLC', t: 'app', m: '/Volumes/vlc-2.2.8', version: '2.2.8' }
 #      - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg', v: true, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9', n: 'ClipMenu', t: 'app', version: '0.4.3' }
 #      - { u: 'http://download.virtualbox.org/virtualbox/5.2.2/VirtualBox-5.2.2-119230-OSX.dmg', v: false, s: '8b664e62700024d0f1dab4b2ec51f2553353509fd5b8e8555f15ddded210f222', n: 'VirtualBox', t: 'pkg', version: '5.2.2' }
 ## FIXME! requires recent apple/openssl to support tls1.2 only server
