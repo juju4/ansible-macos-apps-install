@@ -36,6 +36,8 @@
     sha256sum: "{{ item.s | default('sha256:unknown') }}"
     tmp_dest: /tmp/
   with_items: "{{ macos_apps_install_list }}"
+  vars:
+    ansible_python_interpreter: python3
 
 - name: install macos applications
 #  include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v | default(true) }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_path={{ item.m | default('/Volumes/{{ item.n }}') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('/Applications/{{ item.n }}.app') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }}"
