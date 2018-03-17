@@ -3,6 +3,9 @@
 os:
   - osx
 
+env:
+  - ANSIBLE_PYTHON_INTERPRETER=python3
+
 #language: python
 #python: "2.7"
 before_install:
