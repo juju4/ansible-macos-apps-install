@@ -32,16 +32,6 @@ before_install:
   - env
   - find . -ls
 #  - find $HOME/Library $HOME/.local -ls || true
-  - openssl s_client -connect github.com:443  -cipher 'ALL' < /dev/null || true
-  - $(brew --prefix)/opt/openssl/bin/openssl s_client -connect github.com:443  -cipher 'ALL' < /dev/null || true
-## workaround to openssl mess
-  - sudo install -d -o travis -m755 /private/var/_install
-  - brew install curl
-  - curl -o /private/var/_install/osxfuse-3.7.1.dmg https://github.com/osxfuse/osxfuse/releases/download/osxfuse-3.7.1/osxfuse-3.7.1.dmg
-  - curl -o /private/var/_install/santa-0.9.24.dmg https://github.com/google/santa/releases/download/0.9.24/santa-0.9.24.dmg
-  - curl -o /private/var/_install/dnscrypt-osxclient-1.0.14.dmg https://github.com/alterstep/dnscrypt-osxclient/releases/download/1.0.14/dnscrypt-osxclient-1.0.14.dmg
-  - curl -o /private/var/_install/MacPorts-2.4.2-10.12-Sierra.pkg https://github.com/macports/macports-base/releases/download/v2.4.2/MacPorts-2.4.2-10.12-Sierra.pkg
-
 install:
 #  - brew install ansible
   - python -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
@@ -65,4 +55,4 @@ script:
 ## FIXME! known fail
   - "ansible-playbook -i inventory test/integration/default/default.yml --connection=local --become | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)"
 
-  - "ls -lhA /Applications/"
+  - "ls -lh /Applications/"
