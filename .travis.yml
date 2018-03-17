@@ -34,7 +34,7 @@ before_install:
 #  - find $HOME/Library $HOME/.local -ls || true
 install:
 #  - brew install ansible
-  - python2 -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
+  - python -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
   - pip3 install ansible
   - python3 -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
   - ansible --version
