@@ -14,8 +14,11 @@ before_install:
   - brew install libidn2
   - brew install openssl
   - brew upgrade openssl
-  - brew install python3
-  - brew doctor
+  - brew ls --verbose openssl
+#  - brew install python3
+  - brew upgrade python
+  - brew update
+  - brew doctor || true
   - python --version
 #  - pip --version
   - python -c "import ssl; print(ssl.OPENSSL_VERSION)"
@@ -31,11 +34,11 @@ before_install:
 #  - find $HOME/Library $HOME/.local -ls || true
 install:
 #  - brew install ansible
-  - python2 -c "import ssl; print(ssl.OPENSSL_VERSION)"
   - python2 -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
   - pip3 install ansible
   - python3 -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
   - ansible --version
+  - which ansible
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 script:
   - "echo \"[test-kitchen]\nlocalhost\" > inventory"
@@ -46,10 +49,10 @@ script:
   - "ansible-playbook -i inventory --syntax-check test/integration/default/default.yml"
 
 # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i inventory --connection=local --sudo -vvvv test/integration/default/default.yml -vv"
+  - "ansible-playbook -i inventory --connection=local --become -vvvv test/integration/default/default.yml -vv"
 
 # Run the role/playbook again, checking to make sure it's idempotent.
 ## FIXME! known fail
-  - "ansible-playbook -i inventory test/integration/default/default.yml --connection=local --sudo | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)"
+  - "ansible-playbook -i inventory test/integration/default/default.yml --connection=local --become | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)"
 
   - "ls -lh /Applications/"
