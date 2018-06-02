@@ -4,7 +4,7 @@
 #- hosts: test-kitchen
   vars:
     macos_apps_install_list:
-      - { u: 'https://download.mozilla.org/?product=firefox-60.0-SSL&os=osx&lang=en-US', f: 'firefox-60.0-SSL-en-US.dmg', v: true, s: '79b15eb6f323a5fab4e1dab343c771d9cc93428b1f810487b0cb254d14e2c796', n: 'Firefox', t: 'app', version: '60.0' }
+      - { u: 'https://download.mozilla.org/?product=firefox-60.0-SSL&os=osx&lang=en-US', f: 'firefox-60.0-SSL-en-US.dmg', v: true, s: '1e9145ee978ebd8d1712f48aae4cbe016ebe68254141b978061e240474bcb2ea', n: 'Firefox', t: 'app', version: '60.0' }
       - { u: 'https://download.mozilla.org/?product=thunderbird-52.7.0-SSL&os=osx&lang=en-US', f: 'thunderbird-52.7.0-SSL-fr.dmg', v: true, s: '62ef79941cda1b71371bcf820660855cf1e16e4ee1940cff0aab3831da77ac83', n: 'Thunderbird', t: 'app', version: '52.7.0' }
 #      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg', v: true, s: 'b91ce501fe9a290af9b9cde71ae42f072260365a6b5a8bf18c1e4d2d28d6c511', n: 'Google Chrome', t: 'app', version: '63.0' }
 #      - { u: "https://download.documentfoundation.org/libreoffice/stable/5.4.3/mac/x86_64/LibreOffice_5.4.3_MacOS_x86-64.dmg", v: true, s: '3d4ac4bce9b711e5aa74ee119085125537656dc64cdf9f67a958563c274e6e49', n: 'LibreOffice', t: 'app', version: '5.4.3' }
