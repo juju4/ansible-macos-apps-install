@@ -22,7 +22,8 @@ before_install:
   - brew outdated
 #  - if (brew outdated | grep openssl > /dev/null); then brew upgrade openssl; fi
   - brew ls --verbose openssl
-#  - brew install python3
+# mostly for xcode9.2 platform
+  - brew install python3 || true
 #  - if (brew outdated | grep python > /dev/null); then brew upgrade python; fi
   - brew update
   - brew doctor || true
