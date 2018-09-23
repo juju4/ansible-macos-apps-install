@@ -20,10 +20,10 @@ before_install:
   - brew install libidn2
   - brew install openssl
   - brew outdated
-  - if (brew outdated | grep openssl > /dev/null); then brew upgrade openssl; fi
+#  - if (brew outdated | grep openssl > /dev/null); then brew upgrade openssl; fi
   - brew ls --verbose openssl
 #  - brew install python3
-  - if (brew outdated | grep python > /dev/null); then brew upgrade python; fi
+#  - if (brew outdated | grep python > /dev/null); then brew upgrade python; fi
   - brew update
   - brew doctor || true
   - python --version
