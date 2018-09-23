@@ -22,7 +22,7 @@ before_install:
   - brew outdated
 # xcode9.2: force python upgrade...
   - if (brew outdated | grep python > /dev/null); then brew upgrade python || brew link --overwrite python@2; fi
-  - if (brew outdated | grep openssl > /dev/null); then brew upgrade openssl; fi
+  - if (brew outdated | grep openssl > /dev/null); then brew upgrade openssl || true; fi
   - brew ls --verbose openssl
   - brew update
   - brew doctor || true
