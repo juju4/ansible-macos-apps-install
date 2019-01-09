@@ -14,7 +14,7 @@
     version_app_plist_tag2: "{{ version_app_plist_tag }}"
   when: version_app_plist_tag
 - name: Set fact version_app_plist_tag2
-- set_fact:
+  set_fact:
     version_app_plist_tag2: 'CFBundleShortVersionString'
   when: not version_app_plist_tag
 - name: Set fact version_app_cmd2
