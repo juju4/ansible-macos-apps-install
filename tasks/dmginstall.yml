@@ -10,9 +10,11 @@
   when: not mounted.stat.exists and installer_type is defined and installer_type != 'pkgonly' and installer_type != 'zip'
 
 - block:
-    - set_fact:
+    - name: Set fact app_basename
+      set_fact:
         app_basename: "{{ app_name }}.app"
-    - set_fact:
+    - name: Set fact app_basename if exec_name
+      set_fact:
         app_basename: "{{ exec_name }}"
       when: exec_name is defined and exec_name != ''
     - name: Remove existing app if present
@@ -22,12 +24,15 @@
   when: installer_type is defined and installer_type == 'app'
 
 - block:
-    - set_fact:
+    - name: Set fact pkg_path
+      set_fact:
         pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
-    - set_fact:
+    - name: Set fact pkg_path if exec_name
+      set_fact:
         pkg_path: "{{ mount_path }}/{{ exec_name }}"
       when: exec_name is defined and exec_name != ''
-    - set_fact:
+    - name: Set fact pkg_path if installer_type is pkgonly or zip
+      set_fact:
         pkg_path: "{{ downloads }}/{{ app_dmg }}"
       when: installer_type is defined and (installer_type == 'pkgonly' or installer_type == 'zip')
 ## Note: env allow to pass variables like API_key for http://help.preyproject.com/article/188-prey-unattended-install-for-computers
@@ -48,4 +53,3 @@
 - name: Unmount {{ app_name }} image
   command: "hdiutil detach '{{ mount_path }}'"
   when: installer_type is defined and installer_type != 'pkgonly' and installer_type != 'zip'
-

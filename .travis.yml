@@ -12,7 +12,7 @@ osx_image:
 #language: python
 #python: "2.7"
 before_install:
-  - ln -s ansible-macos-apps-install ../juju4.macos-apps-install
+  - ln -s ansible-macos-apps-install ../juju4.macos_apps_install
   - sw_vers
   - uname -a
   - python --version

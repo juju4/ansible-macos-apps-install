@@ -2,16 +2,20 @@
 ## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
 
-- set_fact:
+- name: Set fact to (non-empty dest)
+  set_fact:
     to: "{{ dest }}"
   when: dest != ''
-- set_fact:
+- name: Set fact to (empty dest)
+  set_fact:
     to: "/Applications/{{ app_name }}.app"
   when: dest == ''
-- set_fact:
+- name: Set fact mount_path (non-empty)
+  set_fact:
     mount_path: "{{ mount_pathi }}"
   when: mount_pathi != ''
-- set_fact:
+- name: Set fact mount_path (empty)
+  set_fact:
     mount_path: "/Volumes/{{ app_name }}"
   when: mount_pathi == ''
 
@@ -21,7 +25,8 @@
   register: app
 
 - include: "macos-apps-version.yml version_app_path={{ to }} version_app_cmd={{ versioncmd }} version_app_default='' version_app_plist_tag={{ plist_tag }}"
-- set_fact:
+- name: Set fact software current version
+  set_fact:
     currentversion: "{{ version_app }}"
 
 - block:

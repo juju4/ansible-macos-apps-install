@@ -1,9 +1,9 @@
 ---
 ## Travis configuration
 
-- set_fact:
+- name: Set fact pip_path for travis
+  set_fact:
     pip_path: /usr/local/bin/pip
 ## this is not passed into ansible on osx
 #  when: ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true'
   when: ansible_env['SUDO_USER'] is defined and ansible_env['SUDO_USER'] == 'travis'
-

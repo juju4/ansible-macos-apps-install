@@ -6,4 +6,3 @@
 - include: travis.yml
 
 - include: darwin.yml
-
