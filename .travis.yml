@@ -17,7 +17,7 @@ before_install:
   - uname -a
   - python --version
   - brew update
-  - brew install libidn2
+  - brew install libidn2 || brew upgrade libidn2
   - brew install openssl
   - brew outdated
 # xcode9.2: force python upgrade...
