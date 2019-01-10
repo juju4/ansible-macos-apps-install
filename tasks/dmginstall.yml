@@ -45,10 +45,10 @@
       become: yes
       ignore_errors: true
     - name: Unarchive {{ app_name }}
-#      unarchive:
-#        src: "{{ pkg_path }}"
-#        dest: "{{ to | default('/Applications') }}"
-      command: "unzip -nd {{ to | default('/Applications') }} {{ pkg_path }}"
+      unarchive:
+        src: "{{ pkg_path }}"
+        dest: "{{ to | default('/Applications') }}"
+#      command: "unzip -nd {{ to | default('/Applications') }} {{ pkg_path }}"
       when: installer_type is defined and installer_type == 'zip'
       become: yes
       ignore_errors: true
