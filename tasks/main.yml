@@ -1,6 +1,7 @@
 ---
 
-- fail: msg="This role is only compatible with Darwin/MacOS"
+- name: FATAL
+  fail: msg="This role is only compatible with Darwin/MacOS"
   when: ansible_os_family != 'Darwin'
 
 - include: travis.yml

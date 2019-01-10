@@ -4,11 +4,11 @@
 - name: Set fact version_app_default2
   set_fact:
     version_app_default2: "{{ version_app_default }}"
-  when: version_app_default != ''
+  when: version_app_default
 - name: Set fact version_app_default2
   set_fact:
     version_app_default2: '0.01'
-  when: version_app_default == ''
+  when: not version_app_default
 - name: Set fact version_app_plist_tag2
   set_fact:
     version_app_plist_tag2: "{{ version_app_plist_tag }}"
