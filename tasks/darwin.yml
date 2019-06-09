@@ -1,7 +1,7 @@
 ---
 
 - debug: var=macos_apps_install_list
-  when: verbose
+  when: verbose|bool
 
 - name: ensure download directory exists
   file:
@@ -15,15 +15,14 @@
   register: hasPip
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
   pip:
-    name: "{{ item }}"
+    name:
+      - requests>=2.12
+      - urllib3>=1.19
+      - pyOpenSSL>=16.0
+      - pyasn1>=0.1.9
+      - ndg-httpsclient>=0.4.2
     state: present
     executable: "{{ pip_path }}"
-  with_items:
-    - requests>=2.12
-    - urllib3>=1.19
-    - pyOpenSSL>=16.0
-    - pyasn1>=0.1.9
-    - ndg-httpsclient>=0.4.2
   when: hasPip.stat.exists and ansible_distribution_version.split('.')[1]|int <= 11
   register: pkg_result
   until: pkg_result is success
