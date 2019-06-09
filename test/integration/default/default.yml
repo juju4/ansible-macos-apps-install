@@ -1,7 +1,6 @@
 ---
 
 - hosts: all
-#- hosts: test-kitchen
   vars:
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-60.0-SSL&os=osx&lang=en-US',

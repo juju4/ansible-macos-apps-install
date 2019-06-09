@@ -49,7 +49,7 @@ install:
   - which ansible
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 script:
-  - "echo \"[test-kitchen]\nlocalhost\" > inventory"
+  - "echo \"localhost\" > inventory"
 
 #  - "ansible-lint tasks/main.yml"
 
