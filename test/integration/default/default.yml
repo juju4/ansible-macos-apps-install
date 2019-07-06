@@ -106,7 +106,7 @@
   ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
       - { u: 'https://github.com/prey/prey-node-client/releases/download/v1.8.3/prey-mac-1.8.3-x64.pkg',
           v: false,
-          s: 'f73fffbc62a65f916cdd5733371bf2799b81a819b5675394faef0be5e4dc6ab9',
+          s: '112c1b38d5415fc86076783885c791eaa02dbce3051e8a7ba5c10bae8b980164',
           n: 'Prey',
           t: 'pkgonly',
           version: '1.8.3',
