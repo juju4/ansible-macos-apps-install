@@ -4,6 +4,8 @@ os:
   - osx
 
 osx_image:
+# OS X 10.14
+  - xcode11
 # OS X 10.13
   - xcode9.4
 # OS X 10.12
