@@ -11,7 +11,8 @@
 
 ## https://github.com/ansible/ansible/issues/18894
 - name: check if pip available
-  stat: path="{{ pip_path }}"
+  stat:
+    path: "{{ pip_path }}"
   register: hasPip
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
   pip:
