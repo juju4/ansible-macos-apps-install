@@ -33,7 +33,7 @@
     dest: "{{ install_archives }}/{{ item.f | default(item.u | basename) }}"
     mode: '0644'
     validate_certs: "{{ item.v | default(true) }}"
-    sha256sum: "{{ item.s | default('sha256:unknown') }}"
+    sha256sum: "{{ omit if (not item or item.s is not defined or not item.s) or item.s }}"
     tmp_dest: /tmp/
   with_items: "{{ macos_apps_install_list }}"
   vars:
