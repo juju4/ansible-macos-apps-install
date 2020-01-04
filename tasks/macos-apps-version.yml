@@ -4,27 +4,27 @@
 - name: Set fact version_app_default2
   set_fact:
     version_app_default2: "{{ version_app_default }}"
-  when: version_app_default
+  when: version_app_default is defined and version_app_default|string
 - name: Set fact version_app_default2
   set_fact:
     version_app_default2: '0.01'
-  when: not version_app_default
+  when: version_app_default is not defined or not version_app_default|string
 - name: Set fact version_app_plist_tag2
   set_fact:
     version_app_plist_tag2: "{{ version_app_plist_tag }}"
-  when: version_app_plist_tag
+  when: version_app_plist_tag is defined and version_app_plist_tag|string
 - name: Set fact version_app_plist_tag2
   set_fact:
     version_app_plist_tag2: 'CFBundleShortVersionString'
-  when: not version_app_plist_tag
+  when: version_app_plist_tag is not defined or not version_app_plist_tag|string
 - name: Set fact version_app_cmd2
   set_fact:
     version_app_cmd2: "{{ version_app_cmd }}"
-  when: version_app_cmd != ''
+  when: version_app_cmd is defined and version_app_cmd|string
 - name: Set fact version_app_cmd2
   set_fact:
     version_app_cmd2: ''
-  when: version_app_cmd == ''
+  when: version_app_cmd is not defined or not version_app_cmd|string
 
 - block:
     - debug: var=version_app_cmd
