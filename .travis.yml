@@ -67,3 +67,5 @@ script:
 
 after_script:
   - "ls -lh /Applications/"
+  - "ls -lh /usr/local/bin/"
+  - "find /usr /opt -iname inspec"
