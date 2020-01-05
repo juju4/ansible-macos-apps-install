@@ -36,19 +36,19 @@
       debug: var=version
     - debug: var=currentversion
       when: app.stat.exists and versioncmd is defined and versioncmd != ""
-    - debug: var="{{ version | version_compare( currentversion, '>') }}"
+    - debug: var="{{ version | version( currentversion, '>') }}"
       when: app.stat.exists and versioncmd is defined and versioncmd != ""
   when: verbose is defined and verbose
 
 ## Note: splitting conditions else not respected/BUG
 #- debug: msg="Doing Install!"
-#  when: not app.stat.exists or "{{ version | version_compare( currentversion, '>') }}"
+#  when: not app.stat.exists or "{{ version | version( currentversion, '>') }}"
 - include: dmginstall.yml
   when: not app.stat.exists
 - block:
     - include: dmginstall.yml
-      when: version is version_compare( currentversion, '>')
+      when: version is version( currentversion, '>')
     - name: Already up-to-date!
       debug: msg="Application {{ app_name }} already up-to-date ({{ currentversion }} >= {{ version }})"
-      when: version is version_compare( currentversion, '<=')
+      when: version is version( currentversion, '<=')
   when: app.stat.exists
