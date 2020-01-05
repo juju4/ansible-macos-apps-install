@@ -46,6 +46,8 @@
 - include: dmginstall.yml
   when: not app.stat.exists
 - block:
+    - debug: var=version
+    - debug: var=currentversion
     - include: dmginstall.yml
       when: version is version( currentversion, '>')
     - name: Already up-to-date!
