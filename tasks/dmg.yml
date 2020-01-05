@@ -47,8 +47,8 @@
   when: not app.stat.exists
 - block:
     - include: dmginstall.yml
-      when: version|string is version_compare( currentversion|string, '>')
+      when: version|string is version_compare( currentversion, '>')
     - name: Already up-to-date!
       debug: msg="Application {{ app_name }} already up-to-date ({{ currentversion }} >= {{ version }})"
-      when: version|string is version_compare( currentversion|string, '<=')
+      when: version|string is version_compare( currentversion, '<=')
   when: app.stat.exists
