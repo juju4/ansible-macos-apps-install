@@ -157,14 +157,14 @@
 #          v: false,
 #          s: 'c66ecf48ccf709f704f02097cf9d68ba97b0efba24f7a0b7b46adfd1133cb86a'
 #        }
-      - { u: 'https://packages.chef.io/files/stable/inspec/4.6.9/mac_os_x/10.14/inspec-4.6.9-1.dmg',
+      - { u: 'https://packages.chef.io/files/stable/inspec/4.18.51/mac_os_x/10.15/inspec-4.18.51-1.dmg',
           v: true,
-          s: 'e61361498a010b83881308df9b7f0f862bccf5a73fdbf9c4bf96c48b7a4c74df',
+          s: 'efbc8949c34ce12cd0f87bbee57b7535f0f3bc1705c47ac4c490909ec85e3aa5',
           n: 'inspec',
           t: 'pkg',
           m: '/Volumes/InSpec',
-          version: '4.6.9',
-          exec_name: 'inspec-4.6.9-1.pkg',
+          version: '4.18.51',
+          exec_name: 'inspec-4.18.51-1.pkg',
           to: '/opt/inspec/bin/inspec',
           versioncmd: 'inspec --version 2>&1 | head -1'
         }
