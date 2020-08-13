@@ -2,55 +2,58 @@
 ## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
 
-- name: Set fact to (non-empty dest)
-  set_fact:
-    to: "{{ dest }}"
-  when: dest != ''
-- name: Set fact to (empty dest)
-  set_fact:
-    to: "/Applications/{{ app_name }}.app"
-  when: dest == ''
-- name: Set fact mount_path (non-empty)
-  set_fact:
-    mount_path: "{{ mount_pathi }}"
-  when: mount_pathi != ''
-- name: Set fact mount_path (empty)
-  set_fact:
-    mount_path: "/Volumes/{{ app_name }}"
-  when: mount_pathi == ''
-
 ## Note: some app are not installing here
-- name: check if {{ app_name }} exists as '{{ to }}'
-  stat: path="{{ to }}"
+- name: Check if '{{ app_name }}' exists as '{{ dest }}'
+  stat:
+    path: "{{ dest }}"
   register: app
+  when: version == ''
 
-- include: "macos-apps-version.yml version_app_path={{ to }} version_app_cmd={{ versioncmd }} version_app_default='' version_app_plist_tag={{ plist_tag }}"
-- name: Set fact software current version
-  set_fact:
-    currentversion: "{{ version_app }}"
+- debug:
+    msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
+  when: version !=''
+
+- debug:
+    msg: The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version
+  when: version == ''
+
+- include: "macos-apps-version.yml
+            version_app_path={{ dest }}
+            version_app_cmd={{ versioncmd }}
+            version_app_default='0.01'
+            version_app_plist_tag={{ plist_tag }}"
+  when: version !=''
 
 - block:
-    - debug: var=mount_path2
-    #- debug: var=app
     - name: debugging info
-      debug: var=version
-    - debug: var=currentversion
+      debug:
+        var: version
+
+    - debug:
+        var: currentversion|default('')
       when: app.stat.exists and versioncmd is defined and versioncmd != ""
-    - debug: var="{{ version | version( currentversion, '>') }}"
+
+    - debug:
+        var: "{{ version | version( currentversion, '>') }}"
       when: app.stat.exists and versioncmd is defined and versioncmd != ""
   when: verbose is defined and verbose
 
-## Note: splitting conditions else not respected/BUG
-#- debug: msg="Doing Install!"
-#  when: not app.stat.exists or "{{ version | version( currentversion, '>') }}"
-- include: dmginstall.yml
-  when: not app.stat.exists
-- block:
-    - debug: var=version
-    - debug: var=currentversion
-    - include: dmginstall.yml
-      when: version is version( currentversion, '>')
-    - name: Already up-to-date!
-      debug: msg="Application {{ app_name }} already up-to-date ({{ currentversion }} >= {{ version }})"
-      when: version is version( currentversion, '<=')
-  when: app.stat.exists
+- name: Already up-to-date!
+  debug:
+    msg: "Application {{ app_name }} already up-to-date (Current {{ currentversion }} >= Desired {{ version }})"
+  when: app.stat.exists and version !='' and version is version( currentversion, '<=')
+
+- name: Download macOS App archive '{{ app_archive }}'
+  get_url:
+    url: "{{ app_url }}"
+    dest: "{{ install_archives }}/{{ app_archive }}"
+    mode: '0644'
+    validate_certs: "{{ validate_certs }}"
+    sha256sum: "{{ omit if (checksum is not defined or checksum == '') }}"
+    tmp_dest: /tmp/
+  vars:
+    ansible_python_interpreter: python3
+  when: not app.stat.exists or version == '' or version is version( currentversion, '>')
+
+- include: archive-install.yml
+  when: not app.stat.exists or version =='' or version is version( currentversion, '>')

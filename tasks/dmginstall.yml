@@ -1,58 +1,90 @@
 ---
 ## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
+- name: Define Application Archive file path
+  set_fact:
+    pkg_path: "{{ install_archives }}/{{ app_archive }}"
 
-- name: check if dmg is mounted in '{{ mount_path }}'
-  stat: path={{ mount_path }}
+- name: Detect Application Archive file extension
+  set_fact:
+    archive_extension: "{{ app_archive|default('') | splitext |  last }}"
+
+- name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
+  stat:
+    path: "{{ mount_path }}"
   register: mounted
-- name: Mount dmg image for {{ app_name }}
-  command: "hdiutil attach {{ downloads }}/{{ app_dmg }}"
-  when: >
-    not mounted.stat.exists and
-    installer_type is defined and installer_type != 'pkgonly' and installer_type != 'zip'
+  when: archive_extension == '.dmg'
+
+# 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
+- name: Mount dmg image '{{ app_archive }}'
+  shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
+  when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
+  changed_when: false
+
 
 - block:
-    - name: Set fact app_basename
-      set_fact:
-        app_basename: "{{ app_name }}.app"
-    - name: Set fact app_basename if exec_name
-      set_fact:
-        app_basename: "{{ exec_name }}"
-      when: exec_name is defined and exec_name != ''
-    - name: Remove existing app if present
-      file: path=/Applications/{{ app_basename }} state=absent
-    - name: Copy {{ app_name }} app to Applications directory
-      command: "cp -R '{{ mount_path }}/{{ app_basename }}' /Applications/"
-  when: installer_type is defined and installer_type == 'app'
+  # Actions for `app` installers contained in DMG archives
+  - name: Define app name to '{{ app_name }}.app'
+    set_fact:
+      app_basename: "{{ app_name }}.app"
+
+  - name: Define exec name to '{{ exec_name }}'
+    set_fact:
+      app_basename: "{{ exec_name }}"
+    when: exec_name is defined and exec_name != ''
+
+  - name: Remove existing app if present
+    file:
+      path: "{{ dest }}"
+      state: absent
+
+  - name: Copy '{{ app_name }}' app to '{{ dest }}'
+    command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}'"
+
+  when: installer_type == 'app' # end block
 
 - block:
-    - name: Set fact pkg_path
-      set_fact:
-        pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
-    - name: Set fact pkg_path if exec_name
-      set_fact:
-        pkg_path: "{{ mount_path }}/{{ exec_name }}"
-      when: exec_name is defined and exec_name != ''
-    - name: Set fact pkg_path if installer_type is pkgonly or zip
-      set_fact:
-        pkg_path: "{{ downloads }}/{{ app_dmg }}"
-      when: installer_type is defined and (installer_type == 'pkgonly' or installer_type == 'zip')
+  # Actions for `pkg` installers contained in DMG archives
+  - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
+    set_fact:
+      pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
+    when: exec_name == ''
+
+  - name: Define exec path to "{{ mount_path }}/{{ exec_name }}"
+    set_fact:
+      pkg_path: "{{ mount_path }}/{{ exec_name }}"
+    when: exec_name != ''
+
+  when: installer_type == 'pkg' # end block
+
 ## Note: env allow to pass variables like API_key for
 ##      http://help.preyproject.com/article/188-prey-unattended-install-for-computers
-    - name: Install {{ app_name }} pkg
-      shell: "{{ env }} installer -package '{{ pkg_path }}' -target /"
-      when: installer_type is defined and (installer_type == 'pkg' or installer_type == 'pkgonly')
-      become: yes
-      ignore_errors: true
-    - name: Unarchive {{ app_name }}
-      unarchive:
-        src: "{{ pkg_path }}"
-        dest: "{{ to | default('/Applications') }}"
-#      command: "unzip -nd {{ to | default('/Applications') }} {{ pkg_path }}"
-      when: installer_type is defined and installer_type == 'zip'
-      become: yes
-      ignore_errors: true
 
-- name: Unmount {{ app_name }} image
-  command: "hdiutil detach '{{ mount_path }}'"
-  when: installer_type is defined and installer_type != 'pkgonly' and installer_type != 'zip'
+- name: Run install of "{{ app_name }}.pkg"
+  shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
+  when: installer_type == 'pkg' or installer_type == 'pkgonly'
+  become: yes
+  ignore_errors: true
+
+# this task is run asyncronously and retried various times
+# because somethims some volumes are still locked by some processes
+# for a little while after an installation
+- name: Unmount dmg image '{{ mount_path }}'
+  command: "hdiutil detach '{{ mount_path | expanduser }}'"
+  when: archive_extension == '.dmg'
+  register: unmount_result
+  changed_when: false
+  retries: 20
+  delay: 10
+  until: unmount_result is not failed
+  async: 1000
+  poll: 0
+
+# if the archive is a compressed file the app will be extrated directly to it's destination
+- name: Extract '{{ app_name }}' to {{ dest }}'
+  unarchive:
+    src: "{{ pkg_path }}"
+    dest: "{{ dest }}"
+  when: archive_extension != '.dmg' and installer_type == 'zip' or installer_type == 'compressed_archive'
+  become: yes
+  ignore_errors: true
