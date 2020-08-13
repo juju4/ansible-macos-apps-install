@@ -68,7 +68,7 @@ macos_apps_install_list:
       env: '',                                 # OPTIONAL # Environment variables required by the installer
       version: '1.0.2',                        # OPTIONAL # Required Application Version         
       t: 'app',                                # OPTIONAL # Installer type         
-      m: '/Volumes/My Fancy App',              # OPTIONAL # Name of the archive mount point when different than application name
+      m: '/Volumes/My Fancy App',              # OPTIONAL # Name of the archive mount point when different than application name or when wanting a custom name
       to: '/Applications',                     # OPTIONAL # Destination name for the application
       versioncmd: '',                          # OPTIONAL # Specific command to retrieve the currently          installed application version
       plist_tag: '',                           # OPTIONAL # Plist tag that identify the application version

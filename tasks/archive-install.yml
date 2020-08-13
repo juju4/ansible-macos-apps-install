@@ -17,7 +17,8 @@
 
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
 - name: Mount dmg image '{{ app_archive }}'
-  shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
+  # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
+  shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}' -mountpoint '{{ mount_path }}'"
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: false
 
@@ -25,7 +26,7 @@
 - block:
   - name: Remove existing app if present
     file:
-      path: "{{ version_app_path }}"
+      path: "{{ dest }}/{{app_basename}}"
       state: absent
 
   - name: Copy '{{ app_name }}' app to '{{ dest }}'
