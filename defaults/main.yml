@@ -1,7 +1,10 @@
 ---
 
 verbose: false
-install_archives: /private/var/_install
+install_archives: ~/Downloads
+remove_archives_after_install: false
+pip_path: /opt/local/bin/pip ## macports
+#pip_path: /usr/local/bin/pip ## homebrew
 
 macos_apps_install_list:
     - { u: 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=fr',
@@ -26,19 +29,3 @@ macos_apps_install_list:
         t: 'pkg',
         version: '5.1.10'
        }
-#    - { u: '',
-#        f: '',
-#        v: true,
-#        s: 'aaaa',
-#        n: '',
-#        t: 'app',
-#        m: '/Volumes/app',
-#        version: '',
-#        versioncmd: '',
-#        to: '/Applications/example.app'
-#      }
-
-## macports
-pip_path: /opt/local/bin/pip
-## homebrew
-#pip_path: /usr/local/bin/pip
