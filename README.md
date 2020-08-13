@@ -48,13 +48,13 @@ macos_apps_install_list:
     }
   - { u: 'https://some.app.com/download/link', # REQUIRED # Archive Download URL
       f: 'archive_file.dmg',                   # REQUIRED # Archive File Name (how it will be saved with)
-      n: 'My Fancy App',                       # REQUIRED # Name of the application used for the .app file
+      n: 'My Fancy App',                       # REQUIRED # Name of the application also used for the .app file
       exec_name: '',                           # OPTIONAL # Name of the installed file if it is not an .app         
       env: '',                                 # OPTIONAL # Environment variables required by the installer
       version: '1.0.2',                        # OPTIONAL # Required Application Version         
       t: 'app',                                # OPTIONAL # Installer type         
       m: '/Volumes/My Fancy App',              # OPTIONAL # Name of the archive mount point when different than application name
-      to: '/Applications/My Fancy App.app',    # OPTIONAL # Destination name for the application
+      to: '/Applications',                     # OPTIONAL # Destination name for the application
       versioncmd: '',                          # OPTIONAL # Specific command to retrieve the currently          installed application version
       plist_tag: '',                           # OPTIONAL # Plist tag that identify the application version
       v: true,                                 # OPTIONAL # Toggle file integrity verification after download         

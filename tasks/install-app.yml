@@ -3,26 +3,42 @@
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
 
 ## Note: some app are not installing here
-- name: Check if '{{ app_name }}' exists as '{{ dest }}'
+
+- name: Define app name to '{{ app_name }}.app'
+  set_fact:
+    app_basename: "{{ app_name }}.app"
+  when: app_name is defined and app_name != ''
+
+- name: Define exec name to '{{ exec_name }}'
+  set_fact:
+    app_basename: "{{ exec_name }}"
+  when: exec_name is defined and exec_name != ''
+
+- name: Check if '{{ app_name }}' exists in '{{ dest }}'
   stat:
-    path: "{{ dest }}"
+    path: "{{ dest }}/{{ app_basename }}"
   register: app
-  when: version == ''
+  when: version != ''
 
 - debug:
     msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
   when: version !=''
 
 - debug:
-    msg: The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version
-  when: version == ''
+    msg: "The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version"
+  when: version == '' and app is defined
+
+- debug:
+    msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"
+  when: version != '' and app is defined and not app.stat.exists
 
 - include: "macos-apps-version.yml
-            version_app_path={{ dest }}
-            version_app_cmd={{ versioncmd }}
+            version_app_path='{{ dest }}/{{app_basename}}'
+            version_app_cmd='{{ versioncmd }}'
             version_app_default='0.01'
-            version_app_plist_tag={{ plist_tag }}"
-  when: version !=''
+            version_app_plist_tag='{{ plist_tag }}'
+            "
+  when: version !='' and app is defined and app.stat.exists
 
 - block:
     - name: debugging info
@@ -31,17 +47,17 @@
 
     - debug:
         var: currentversion|default('')
-      when: app.stat.exists and versioncmd is defined and versioncmd != ""
+      when: app is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
 
     - debug:
         var: "{{ version | version( currentversion, '>') }}"
-      when: app.stat.exists and versioncmd is defined and versioncmd != ""
+      when: app is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
   when: verbose is defined and verbose
 
 - name: Already up-to-date!
   debug:
     msg: "Application {{ app_name }} already up-to-date (Current {{ currentversion }} >= Desired {{ version }})"
-  when: app.stat.exists and version !='' and version is version( currentversion, '<=')
+  when: app is defined and  app.stat.exists and version !='' and version is version( currentversion, '<=')
 
 - name: Download macOS App archive '{{ app_archive }}'
   get_url:
@@ -53,7 +69,7 @@
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
-  when: not app.stat.exists or version == '' or version is version( currentversion, '>')
+  when: (app is defined and not app.stat.exists) or version == '' or version is version( currentversion, '>')
 
 - include: archive-install.yml
-  when: not app.stat.exists or version =='' or version is version( currentversion, '>')
+  when: (app is defined and not app.stat.exists) or version =='' or version is version( currentversion, '>')

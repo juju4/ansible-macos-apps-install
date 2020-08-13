@@ -40,7 +40,7 @@
             mount_path={{ item.m | default('/Volumes/' + item.n) }}
             version={{ item.version | default('') }}
             versioncmd={{ item.versioncmd | default('') }}
-            dest={{ item.to | default('/Applications/' + item.n + '.app') }}
+            dest={{ item.to | default('/Applications') }}
             exec_name={{ item.exec_name | default('') }}
             env={{ item.env | default('') }}
             plist_tag={{ item.plist_tag | default('CFBundleShortVersionString') }}
