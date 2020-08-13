@@ -26,11 +26,11 @@
 
 - debug:
     msg: "The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version"
-  when: version == '' and app is defined
+  when: version == '' 
 
 - debug:
     msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"
-  when: version != '' and app is defined and not app.stat.exists
+  when: version != '' and app.stat.exists is defined and not app.stat.exists
 
 - include: "macos-apps-version.yml
             version_app_path='{{ dest }}/{{app_basename}}'
@@ -47,17 +47,17 @@
 
     - debug:
         var: currentversion|default('')
-      when: app is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
+      when: app.stat.exists is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
 
     - debug:
         var: "{{ version | version( currentversion, '>') }}"
-      when: app is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
+      when: app.stat.exists is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
   when: verbose is defined and verbose
 
 - name: Already up-to-date!
   debug:
     msg: "Application {{ app_name }} already up-to-date (Current {{ currentversion }} >= Desired {{ version }})"
-  when: app is defined and  app.stat.exists and version !='' and version is version( currentversion, '<=')
+  when: app.stat.exists is defined and app.stat.exists and version !='' and version is version( currentversion, '<=')
 
 - name: Download macOS App archive '{{ app_archive }}'
   get_url:
@@ -69,7 +69,7 @@
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
-  when: (app is defined and not app.stat.exists) or version == '' or version is version( currentversion, '>')
+  when: (app.stat.exists is defined and not app.stat.exists) or version == '' or version is version( currentversion, '>')
 
 - include: archive-install.yml
-  when: (app is defined and not app.stat.exists) or version =='' or version is version( currentversion, '>')
+  when: (app.stat.exists is defined and not app.stat.exists) or version =='' or version is version( currentversion, '>')
