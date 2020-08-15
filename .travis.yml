@@ -5,7 +5,7 @@ os:
 
 osx_image:
 # OS X 10.15
-  - xcode11.6
+  - xcode12
 # OS X 10.14
   - xcode11.2
 # OS X 10.13
