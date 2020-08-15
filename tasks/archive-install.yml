@@ -27,9 +27,11 @@
     file:
       path: "{{ dest }}/{{app_basename}}"
       state: absent
+    become: yes
 
   - name: Copy '{{ app_name }}' app to '{{ dest }}'
     command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}'"
+    become: yes
 
   when: installer_type == 'app' # end block
 
@@ -65,7 +67,7 @@
 - name: Run install of "{{ app_name }}.pkg"
   shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
   when: installer_type == 'pkg' or installer_type == 'pkgonly'
-  become: yes
+  become: true
   ignore_errors: true
 
 - name: Run interactive install of "{{ app_name }}"

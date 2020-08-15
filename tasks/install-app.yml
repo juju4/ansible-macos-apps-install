@@ -26,7 +26,7 @@
 
 - debug:
     msg: "The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version"
-  when: version == '' 
+  when: version == ''
 
 - debug:
     msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"

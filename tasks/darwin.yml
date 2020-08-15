@@ -48,4 +48,3 @@
             plist_tag={{ item.plist_tag | default('CFBundleShortVersionString') }}
             "
   with_items: "{{ macos_apps_install_list }}"
-  become: yes
