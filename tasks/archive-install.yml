@@ -4,11 +4,9 @@
 
 - debug:
     msg: "Archive Path {{pkg_path}}"
-  when: verbose|bool
 
 - debug:
     msg: "Archive extension {{archive_extension}}"
-  when: verbose|bool
 
 - name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
   stat:
