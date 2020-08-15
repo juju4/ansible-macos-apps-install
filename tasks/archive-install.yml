@@ -1,13 +1,14 @@
 ---
 ## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
-- name: Define Application Archive file path
-  set_fact:
-    pkg_path: "{{ install_archives }}/{{ app_archive }}"
 
-- name: Detect Application Archive file extension
-  set_fact:
-    archive_extension: "{{ app_archive|default('') | splitext |  last }}"
+- debug:
+    msg: "Archive Path {{pkg_path}}"
+  when: verbose|bool
+
+- debug:
+    msg: "Archive extension {{archive_extension}}"
+  when: verbose|bool
 
 - name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
   stat:
@@ -18,7 +19,7 @@
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
 - name: Mount dmg image '{{ app_archive }}'
   # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
-  shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}' -mountpoint '{{ mount_path }}'"
+  shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: false
 

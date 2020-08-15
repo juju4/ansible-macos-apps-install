@@ -8,7 +8,6 @@
     dest: "{{ install_archives }}"
     state: directory
     mode: '0755'
-  become: true
 
 ## https://github.com/ansible/ansible/issues/18894
 - name: Check if pip available
@@ -34,6 +33,7 @@
   include: "install-app.yml
             app_url={{ item.u }}
             app_archive={{ item.f | default(item.u | basename) }}
+            pkg_path={{ install_archives | expanduser  }}/{{ app_archive }}
             validate_certs={{ item.v | default(true) }}
             checksum={{ item.s | default('')}}
             app_name={{ item.n }}
