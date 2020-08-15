@@ -4,6 +4,7 @@
 
 - debug:
     msg: "Archive Path {{pkg_path}}"
+  when: verbose|bool
 
 - debug:
     msg: "Archive extension {{archive_extension}}"

@@ -52,7 +52,7 @@
     - debug:
         var: "{{ version | version( currentversion, '>') }}"
       when: app.stat.exists is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
-  when: verbose is defined and verbose
+  when: verbose|bool
 
 - name: Already up-to-date!
   debug:

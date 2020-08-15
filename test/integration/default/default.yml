@@ -2,6 +2,7 @@
 
 - hosts: all
   vars:
+    verbose: true
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-69.0-SSL&os=osx&lang=en-US',
           f: 'firefox-69.0-SSL-en-US.dmg',
