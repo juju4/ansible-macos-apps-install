@@ -3,9 +3,9 @@
 - debug: var=macos_apps_install_list
   when: verbose|bool
 
-- name: "Ensure download directory {{ install_archives }} exists"
+- name: "Ensure download directory {{ install_archives | expanduser }} exists"
   file:
-    dest: "{{ install_archives }}"
+    dest: "{{ install_archives | expanduser }}"
     state: directory
     mode: '0755'
 

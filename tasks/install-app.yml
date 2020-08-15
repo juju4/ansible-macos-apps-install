@@ -62,7 +62,7 @@
 - name: Download macOS App archive '{{ app_archive }}'
   get_url:
     url: "{{ app_url }}"
-    dest: "{{ install_archives }}/{{ app_archive }}"
+    dest: "{{ pkg_path }}"
     mode: '0644'
     validate_certs: "{{ validate_certs }}"
     sha256sum: "{{ omit if (checksum is not defined or checksum == '') }}"
