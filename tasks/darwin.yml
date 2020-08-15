@@ -43,7 +43,7 @@
             version={{ item.version | default('') }}
             versioncmd={{ item.versioncmd | default('') }}
             dest={{ item.to | default('/Applications') }}
-            exec_name={{ item.exec_name | default('') }}
+            installer_name={{ item.exec_name | default('') }}
             env={{ item.env | default('') }}
             plist_tag={{ item.plist_tag | default('CFBundleShortVersionString') }}
             "

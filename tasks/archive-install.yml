@@ -38,13 +38,13 @@
 
 - block:
   - fail:
-      msg: "'exec_name' must be set to the installer path"
-    when: exec_name == ''
+      msg: "'exec_name' (installer name), must be set to the installer path"
+    when: installer_name == ''
 
-  - name: Define Installer path "{{ mount_path }}/{{ exec_name }}"
+  - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
     set_fact:
-      pkg_path: "{{ mount_path }}/{{ exec_name }}"
-    when: exec_name != ''
+      pkg_path: "{{ mount_path }}/{{ installer_name }}"
+    when: installer_name != ''
 
   when: installer_type == 'installer' # end block
 
@@ -53,12 +53,12 @@
   - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
     set_fact:
       pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
-    when: exec_name == ''
+    when: installer_name == ''
 
-  - name: Define exec path to "{{ mount_path }}/{{ exec_name }}"
+  - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
     set_fact:
-      pkg_path: "{{ mount_path }}/{{ exec_name }}"
-    when: exec_name != ''
+      pkg_path: "{{ mount_path }}/{{ installer_name }}"
+    when: installer_name != ''
 
   when: installer_type == 'pkg' # end block
 

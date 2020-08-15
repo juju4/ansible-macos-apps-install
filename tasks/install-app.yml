@@ -9,16 +9,27 @@
     app_basename: "{{ app_name }}.app"
   when: app_name is defined and app_name != ''
 
-- name: Define exec name to '{{ exec_name }}'
+- name: Define installer name to '{{ installer_name }}'
   set_fact:
-    app_basename: "{{ exec_name }}"
-  when: exec_name is defined and exec_name != ''
+    app_basename: "{{ installer_name }}"
+  when: installer_name is defined and installer_name != ''
 
 - name: Check if '{{ app_name }}' exists in '{{ dest }}'
   stat:
-    path: "{{ dest }}/{{ app_basename }}"
+    path: "{{ dest }}/{{ app_name }}.app"
   register: app
   when: version != ''
+
+- debug:
+    msg: "Install Archive: {{install_archives}}'"
+  when: verbose|bool
+- debug:
+    msg: "App Name: {{app_archive}}'"
+  when: verbose|bool
+- debug:
+    msg: "Package Path: {{pkg_path}}'"
+  when: verbose|bool
+
 
 - debug:
     msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
