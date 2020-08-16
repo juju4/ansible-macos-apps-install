@@ -4,6 +4,10 @@
 
 ## Note: some app are not installing here
 
+- name: Define Package Path
+  set_fact:
+    pkg_path: "{{ install_archives | expanduser  }}/{{ app_archive }}"
+    
 - name: Define app name to '{{ app_name }}.app'
   set_fact:
     app_basename: "{{ app_name }}.app"

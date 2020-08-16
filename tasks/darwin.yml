@@ -33,7 +33,6 @@
   include: "install-app.yml
             app_url={{ item.u }}
             app_archive={{ item.f | default(item.u | basename) }}
-            pkg_path={{ install_archives | expanduser  }}/{{ app_archive }}
             archive_extension={{ app_archive|default('') | splitext |  last }}
             validate_certs={{ item.v | default(true) }}
             checksum={{ item.s | default('')}}
@@ -47,4 +46,5 @@
             env={{ item.env | default('') }}
             plist_tag={{ item.plist_tag | default('CFBundleShortVersionString') }}
             "
+            #pkg_path={{ install_archives | expanduser  }}/{{ app_archive }}
   with_items: "{{ macos_apps_install_list }}"
