@@ -1,0 +1,100 @@
+---
+## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
+## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
+
+- debug:
+    msg: "Archive Path {{pkg_path}}"
+  when: verbose|bool
+
+- debug:
+    msg: "Archive extension '{{archive_extension}}'"
+
+- name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
+  stat:
+    path: "{{ mount_path }}"
+  register: mounted
+  when: archive_extension == '.dmg'
+
+# 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
+- name: Mount dmg image '{{ app_archive }}'
+  # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
+  shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"
+  when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
+  changed_when: false
+
+
+- block:
+  - name: Remove existing app if present
+    file:
+      path: "{{ dest }}/{{app_basename}}"
+      state: absent
+    become: yes
+
+  - name: Copy '{{ app_name }}' app to '{{ dest }}'
+    command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}/'"
+    become: yes
+
+  when: installer_type == 'app' # end block
+
+- block:
+  - fail:
+      msg: "'exec_name' (installer name), must be set to the installer path"
+    when: installer_name == ''
+
+  - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
+    set_fact:
+      pkg_path: "{{ mount_path }}/{{ installer_name }}"
+    when: installer_name != ''
+
+  when: installer_type == 'installer' # end block
+
+- block:
+  # Actions for `pkg` installers contained in DMG archives
+  - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
+    set_fact:
+      pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
+    when: installer_name == ''
+
+  - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
+    set_fact:
+      pkg_path: "{{ mount_path }}/{{ installer_name }}"
+    when: installer_name != ''
+
+  when: installer_type == 'pkg' # end block
+
+## Note: env allow to pass variables like API_key for
+##      http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+
+- name: Run install of "{{ app_name }}.pkg"
+  shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
+  when: installer_type == 'pkg' or installer_type == 'pkgonly'
+  become: true
+  ignore_errors: true
+
+- name: Run interactive install of "{{ app_name }}"
+  shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
+  when: installer_type == 'installer'
+  ignore_errors: true
+
+# this task is run asyncronously and retried various times
+# because somethims some volumes are still locked by some processes
+# for a little while after an installation
+- name: Unmount dmg image '{{ mount_path }}'
+  command: "hdiutil detach '{{ mount_path | expanduser }}'"
+  when: archive_extension == '.dmg'
+  register: unmount_result
+  changed_when: false
+  retries: 20
+  delay: 10
+  until: unmount_result is not failed
+  async: 1000
+  poll: 0
+
+# if the archive is a compressed file the app will be extrated directly to it's destination
+- name: Extract '{{ app_name }}' to {{ dest }}'
+  unarchive:
+    src: "{{ pkg_path }}"
+    dest: "{{ dest }}"
+  when: archive_extension != '.dmg' and installer_type == 'zip' or installer_type == 'compressed_archive'
+  become: yes
+  ignore_errors: true

@@ -3,17 +3,18 @@
 - debug: var=macos_apps_install_list
   when: verbose|bool
 
-- name: ensure download directory exists
+- name: "Ensure download directory {{ install_archives | expanduser }} exists"
   file:
-    dest: "{{ install_archives }}"
+    dest: "{{ install_archives | expanduser }}"
     state: directory
     mode: '0755'
 
 ## https://github.com/ansible/ansible/issues/18894
-- name: check if pip available
+- name: Check if pip available
   stat:
     path: "{{ pip_path }}"
   register: hasPip
+
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
   pip:
     name:
@@ -28,19 +29,22 @@
   register: pkg_result
   until: pkg_result is success
 
-- name: download macos applications
-  get_url:
-    url: "{{ item.u }}"
-    dest: "{{ install_archives }}/{{ item.f | default(item.u | basename) }}"
-    mode: '0644'
-    validate_certs: "{{ item.v | default(true) }}"
-    sha256sum: "{{ omit if (not item or item.s is not defined or not item.s) or item.s }}"
-    tmp_dest: /tmp/
+- name: Install macOS applications
+  include: "install-app.yml
+            app_url={{ item.u }}
+            app_archive={{ item.f | default(item.u | basename) }}
+            archive_extension={{ app_archive|default('') | splitext |  last }}
+            validate_certs={{ item.v | default(true) }}
+            checksum={{ item.s | default('')}}
+            app_name={{ item.n }}
+            installer_type={{ item.t|default('app') }}
+            mount_path={{ item.m | default('/Volumes/' + item.n) }}
+            version={{ item.version | default('') }}
+            versioncmd={{ item.versioncmd | default('') }}
+            dest={{ item.to | default('/Applications') }}
+            installer_name={{ item.exec_name | default('') }}
+            env={{ item.env | default('') }}
+            plist_tag={{ item.plist_tag | default('CFBundleShortVersionString') }}
+            "
+            #pkg_path={{ install_archives | expanduser  }}/{{ app_archive }}
   with_items: "{{ macos_apps_install_list }}"
-  vars:
-    ansible_python_interpreter: python3
-
-- name: install macos applications
-  include: "dmg.yml app_url={{ item.u }} downloads={{ install_archives }} app_dmg={{ item.f | default(item.u | basename) }} v={{ item.v }} s={{ item.s }} app_name={{ item.n }} installer_type={{ item.t }} mount_pathi={{ item.m | default('') }} version={{ item.version }} versioncmd={{ item.versioncmd | default('') }} dest={{ item.to | default('') }} exec_name={{ item.exec_name | default('') }} env={{ item.env | default('') }} plist_tag={{ item.plist_tag | default('') }}"
-  with_items: "{{ macos_apps_install_list }}"
-  become: yes
