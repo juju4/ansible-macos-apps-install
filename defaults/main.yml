@@ -1,7 +1,7 @@
 ---
 
 verbose: false
-install_archives: ~/Downloads
+install_archives: /private/var/_install
 remove_archives_after_install: false
 pip_path: /opt/local/bin/pip ## macports
 #pip_path: /usr/local/bin/pip ## homebrew
