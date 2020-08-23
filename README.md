@@ -42,14 +42,14 @@ See `test/integration/default/default.yml` for examples of applications installa
 
 ```
 target_user_id: "username"      # the name of the user we want the apps to belong to
-verbose: no
+verbose: False
 install_archives: ~/Downloads
 pip_path: /opt/local/bin/pip    # Homebrew's pip: /opt/local/bin/pip
 
 macos_apps_install_list:
   - { u: 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=fr',
       f: 'firefox-50.1.0-SSL-fr.dmg',
-      v: yes,
+      v: True,
       s: '63c561051b1846f110ea60446a6578991a84d169e07dcfe1f4ea35aa4ca20e2a',
       n: 'Firefox',
       t: 'app',
@@ -73,7 +73,7 @@ macos_apps_install_list:
       to: '/Applications',                     # OPTIONAL # Destination name for the application
       versioncmd: '',                          # OPTIONAL # Specific command to retrieve the currently          installed application version
       plist_tag: '',                           # OPTIONAL # Plist tag that identify the application version
-      v: yes,                                 # OPTIONAL # Toggle file integrity verification after download         
+      v: True,                                 # OPTIONAL # Toggle file integrity verification after download         
       s: '63c5610...a20e2a',                   # OPTIONAL # Checksum value for file integrity verification
     }
 

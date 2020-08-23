@@ -1,30 +1,30 @@
 ---
 
-verbose: no
+verbose: False
 target_user_id: "{{ ansible_user_id }}"
 install_archives: /private/var/_install
-remove_archives_after_install: no
+remove_archives_after_install: False
 pip_path: /opt/local/bin/pip ## macports
 #pip_path: /usr/local/bin/pip ## homebrew
 
 macos_apps_install_list:
     - { u: 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=fr',
         f: 'firefox-50.1.0-SSL-fr.dmg',
-        v: yes,
+        v: True,
         s: '63c561051b1846f110ea60446a6578991a84d169e07dcfe1f4ea35aa4ca20e2a',
         n: 'Firefox',
         t: 'app',
         version: '50.1.0'
       }
     - { u: "https://download.documentfoundation.org/libreoffice/stable/5.2.3/mac/x86_64/LibreOffice_5.2.3_MacOS_x86-64.dmg",
-        v: yes,
+        v: True,
         s: '7f842a38e00312b6283341af3323433558bc155495cf54206dc88a5dd3abe277',
         n: 'LibreOffice',
         t: 'app',
         version: '5.2.3'
       }
     - { u: 'http://download.virtualbox.org/virtualbox/5.1.10/VirtualBox-5.1.10-112026-OSX.dmg',
-        v: no,
+        v: False,
         s: '3500f07be9f5e27a08c00cc626981230bdaf639f6fad0b82ecf731a0580cccef',
         n: 'VirtualBox',
         t: 'pkg',

@@ -20,7 +20,7 @@
   # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
   shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
-  changed_when: no
+  changed_when: False
 
 - block:
   # we want the super-user to remvoe the existing app in case it was installed by another user
@@ -29,7 +29,7 @@
       path: "{{ dest }}/{{app_basename}}"
       state: absent
     when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
-  become: yes
+  become: True
 
 - block:
     # Actions for `installer` type
@@ -79,8 +79,8 @@
     when:
       - archive_extension != '.dmg'
       - (installer_type == 'zip' or installer_type == 'compressed_archive')
-    ignore_errors: yes
-    become: yes
+    ignore_errors: True
+    become: True
   # end block
   when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
 
@@ -94,10 +94,10 @@
   ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
   - name: Run install of "{{ app_name }}.pkg"
     shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
-    ignore_errors: yes
+    ignore_errors: True
   # end block
   when: installer_type == 'pkg' or installer_type == 'pkgonly'
-  become: yes
+  become: True
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
@@ -107,7 +107,7 @@
 
   - name: Run interactive install of "{{ app_name }}"
     shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
-    ignore_errors: yes
+    ignore_errors: True
   # end block
   when: installer_type == 'installer'
 
@@ -118,7 +118,7 @@
   command: "hdiutil detach '{{ mount_path | expanduser }}'"
   when: archive_extension == '.dmg'
   register: unmount_result
-  changed_when: no
+  changed_when: False
   retries: 20
   delay: 10
   until: unmount_result is not failed
