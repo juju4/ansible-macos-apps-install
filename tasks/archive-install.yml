@@ -57,6 +57,8 @@
   when: installer_type == 'pkg' # end block
 
 - block:
+  - debug:
+      msg: "This app will be installed as the user `{{ become_user }}`"
     # we want that the installed app will belong to the target-user
     #
     # Actions for `app` `zip` and `compressed installer types

@@ -41,6 +41,7 @@ For example
 See `test/integration/default/default.yml` for examples of applications installation.
 
 ```
+target_user_id: "username"      # the name of the user we want the apps to belong to
 verbose: no
 install_archives: ~/Downloads
 pip_path: /opt/local/bin/pip    # Homebrew's pip: /opt/local/bin/pip
