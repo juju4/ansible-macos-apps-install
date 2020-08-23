@@ -86,7 +86,7 @@
   # This block is run as super-user because pkg installation frequently contain
   # system components that require the higher provileges to be installed in system paths
   - debug:
-    msg: "This app will be installed as the user `{{ become_user }}`"
+      msg: "This app will be installed as the user `{{ become_user }}`"
   ## Note: env allow to pass variables like API_key for
   ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
   - name: Run install of "{{ app_name }}.pkg"
