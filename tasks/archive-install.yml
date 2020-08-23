@@ -67,26 +67,29 @@
     when:
       - archive_extension == '.dmg'
       - installer_type == 'app'
+    become: "{{ (target_user_id != ansible_user_id) | bool }}"
+    become_user: "{{ target_user_id }}"
 
   # if the archive is a compressed file the app will be extrated directly to it's destination
   - name: Extract '{{ app_name }}' to {{ dest }}'
     unarchive:
       src: "{{ pkg_path }}"
       dest: "{{ dest }}"
+      owner: "{{ target_user_id }}"
     when:
       - archive_extension != '.dmg'
       - (installer_type == 'zip' or installer_type == 'compressed_archive')
     ignore_errors: yes
+    become: yes
   # end block
-  when: installer_type == 'app' or installer_type == 'zip 'and installer_type == 'compressed_archive'
-  become: "{{ (target_user_id != ansible_user_id) | bool }}"
-  become_user: "{{ target_user_id }}"
+  when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
+
 
 - block:
   # This block is run as super-user because pkg installation frequently contain
   # system components that require the higher provileges to be installed in system paths
   - debug:
-      msg: "This app will be installed as the user `{{ become_user }}`"
+      msg: "This app will be installed with super-user privileges"
   ## Note: env allow to pass variables like API_key for
   ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
   - name: Run install of "{{ app_name }}.pkg"
@@ -100,7 +103,7 @@
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
 - block:
   - debug:
-      msg: "This app will be installed as the user `{{ ansinle_user_id }}`"
+      msg: "This app will be installed as the user `{{ ansible_user_id }}`"
 
   - name: Run interactive install of "{{ app_name }}"
     shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
