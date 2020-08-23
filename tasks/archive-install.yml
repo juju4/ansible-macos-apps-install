@@ -59,7 +59,6 @@
   when: installer_type == 'pkg'
 
 - block:
-  # we want that the installed app will belong to the target-user
   - debug:
       msg: "This app will be installed as the user `{{ target_user_id }}`"
     # Actions for `app` `zip` and `compressed installer types
@@ -79,16 +78,17 @@
       - (installer_type == 'zip' or installer_type == 'compressed_archive')
     ignore_errors: yes
   # end block
-  when: installer_type != 'pkg' and installer_type != 'pkgonly'
+  when: installer_type == 'app' or installer_type == 'zip 'and installer_type == 'compressed_archive'
   become: "{{ (target_user_id != ansible_user_id) | bool }}"
   become_user: "{{ target_user_id }}"
 
 - block:
   # This block is run as super-user because pkg installation frequently contain
   # system components that require the higher provileges to be installed in system paths
-  #
+  - debug:
+    msg: "This app will be installed as the user `{{ become_user }}`"
   ## Note: env allow to pass variables like API_key for
-  ##      http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+  ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
   - name: Run install of "{{ app_name }}.pkg"
     shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
     ignore_errors: yes
@@ -98,10 +98,15 @@
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
-- name: Run interactive install of "{{ app_name }}"
-  shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
+- block:
+  - debug:
+      msg: "This app will be installed as the user `{{ ansinle_user_id }}`"
+
+  - name: Run interactive install of "{{ app_name }}"
+    shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
+    ignore_errors: yes
+  # end block
   when: installer_type == 'installer'
-  ignore_errors: yes
 
 # this task is run asyncronously and retried various times
 # because somethims some volumes are still locked by some processes
