@@ -69,7 +69,7 @@
   # end block
   when:
     - verbose|bool
-    - app.stat.exists is defined and app.stat.exist
+    - version !='' and app is defined and app.stat.exists
 
 - name: Already up-to-date!
   debug:
