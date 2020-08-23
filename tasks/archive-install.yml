@@ -20,7 +20,7 @@
   # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
   shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
-  changed_when: false
+  changed_when: no
 
 - block:
   # we want the super-user to remvoe the existing app in case it was installed by another user
@@ -74,7 +74,7 @@
     when:
       - archive_extension != '.dmg'
       - (installer_type == 'zip' or installer_type == 'compressed_archive')
-    ignore_errors: true
+    ignore_errors: yes
   when: installer_type != 'pkg' # end block
   become: "{{ (target_user_id != ansible_user_id) | bool }}"
   become_user: "{{ target_user_id }}"
@@ -88,7 +88,7 @@
   - name: Run install of "{{ app_name }}.pkg"
     shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
     when: installer_type == 'pkg' or installer_type == 'pkgonly'
-    ignore_errors: true
+    ignore_errors: yes
   become: yes
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
@@ -96,7 +96,7 @@
 - name: Run interactive install of "{{ app_name }}"
   shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
   when: installer_type == 'installer'
-  ignore_errors: true
+  ignore_errors: yes
 
 # this task is run asyncronously and retried various times
 # because somethims some volumes are still locked by some processes
@@ -105,7 +105,7 @@
   command: "hdiutil detach '{{ mount_path | expanduser }}'"
   when: archive_extension == '.dmg'
   register: unmount_result
-  changed_when: false
+  changed_when: no
   retries: 20
   delay: 10
   until: unmount_result is not failed
