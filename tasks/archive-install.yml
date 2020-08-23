@@ -41,7 +41,8 @@
     set_fact:
       pkg_path: "{{ mount_path }}/{{ installer_name }}"
     when: installer_name != ''
-  when: installer_type == 'installer' # end block
+  # end block
+  when: installer_type == 'installer'
 
 - block:
   # Actions for `pkg` installers contained in DMG archives
@@ -54,13 +55,13 @@
     set_fact:
       pkg_path: "{{ mount_path }}/{{ installer_name }}"
     when: installer_name != ''
-  when: installer_type == 'pkg' # end block
+  # end block
+  when: installer_type == 'pkg'
 
 - block:
+  # we want that the installed app will belong to the target-user
   - debug:
-      msg: "This app will be installed as the user `{{ become_user }}`"
-    # we want that the installed app will belong to the target-user
-    #
+      msg: "This app will be installed as the user `{{ target_user_id }}`"
     # Actions for `app` `zip` and `compressed installer types
   - name: Copy '{{ app_name }}' app to '{{ dest }}'
     command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}/'"
@@ -77,7 +78,8 @@
       - archive_extension != '.dmg'
       - (installer_type == 'zip' or installer_type == 'compressed_archive')
     ignore_errors: yes
-  when: installer_type != 'pkg' # end block
+  # end block
+  when: installer_type != 'pkg' and installer_type != 'pkgonly'
   become: "{{ (target_user_id != ansible_user_id) | bool }}"
   become_user: "{{ target_user_id }}"
 
@@ -89,8 +91,9 @@
   ##      http://help.preyproject.com/article/188-prey-unattended-install-for-computers
   - name: Run install of "{{ app_name }}.pkg"
     shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
-    when: installer_type == 'pkg' or installer_type == 'pkgonly'
     ignore_errors: yes
+  # end block
+  when: installer_type == 'pkg' or installer_type == 'pkgonly'
   become: yes
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
