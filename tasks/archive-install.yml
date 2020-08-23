@@ -22,21 +22,17 @@
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: false
 
-
 - block:
+  # we want the super-user to remvoe the existing app in case it was installed by another user
   - name: Remove existing app if present
     file:
       path: "{{ dest }}/{{app_basename}}"
       state: absent
-    become: yes
-
-  - name: Copy '{{ app_name }}' app to '{{ dest }}'
-    command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}/'"
-    become: yes
-
-  when: installer_type == 'app' # end block
+    when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
+  become: yes
 
 - block:
+    # Actions for `installer` type
   - fail:
       msg: "'exec_name' (installer name), must be set to the installer path"
     when: installer_name == ''
@@ -45,7 +41,6 @@
     set_fact:
       pkg_path: "{{ mount_path }}/{{ installer_name }}"
     when: installer_name != ''
-
   when: installer_type == 'installer' # end block
 
 - block:
@@ -59,18 +54,45 @@
     set_fact:
       pkg_path: "{{ mount_path }}/{{ installer_name }}"
     when: installer_name != ''
-
   when: installer_type == 'pkg' # end block
 
-## Note: env allow to pass variables like API_key for
-##      http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+- block:
+    # we want that the installed app will belong to the target-user
+    #
+    # Actions for `app` `zip` and `compressed installer types
+  - name: Copy '{{ app_name }}' app to '{{ dest }}'
+    command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}/'"
+    when:
+      - archive_extension == '.dmg'
+      - installer_type == 'app'
 
-- name: Run install of "{{ app_name }}.pkg"
-  shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
-  when: installer_type == 'pkg' or installer_type == 'pkgonly'
-  become: true
-  ignore_errors: true
+  # if the archive is a compressed file the app will be extrated directly to it's destination
+  - name: Extract '{{ app_name }}' to {{ dest }}'
+    unarchive:
+      src: "{{ pkg_path }}"
+      dest: "{{ dest }}"
+    when:
+      - archive_extension != '.dmg'
+      - (installer_type == 'zip' or installer_type == 'compressed_archive')
+    ignore_errors: true
+  when: installer_type != 'pkg' # end block
+  become: "{{ (target_user_id != ansible_user_id) | bool }}"
+  become_user: "{{ target_user_id }}"
 
+- block:
+  # This block is run as super-user because pkg installation frequently contain
+  # system components that require the higher provileges to be installed in system paths
+  #
+  ## Note: env allow to pass variables like API_key for
+  ##      http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+  - name: Run install of "{{ app_name }}.pkg"
+    shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
+    when: installer_type == 'pkg' or installer_type == 'pkgonly'
+    ignore_errors: true
+  become: yes
+
+# this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
+# so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
 - name: Run interactive install of "{{ app_name }}"
   shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
   when: installer_type == 'installer'
@@ -89,12 +111,3 @@
   until: unmount_result is not failed
   async: 1000
   poll: 0
-
-# if the archive is a compressed file the app will be extrated directly to it's destination
-- name: Extract '{{ app_name }}' to {{ dest }}'
-  unarchive:
-    src: "{{ pkg_path }}"
-    dest: "{{ dest }}"
-  when: archive_extension != '.dmg' and installer_type == 'zip' or installer_type == 'compressed_archive'
-  become: yes
-  ignore_errors: true
