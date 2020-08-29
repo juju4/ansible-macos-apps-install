@@ -2,7 +2,7 @@
 ## https://docs.travis-ci.com/user/osx-ci-environment/
 os:
   - osx
-  
+
 osx_image:
 # OS X 10.15
   - xcode12
@@ -57,6 +57,9 @@ install:
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 script:
   - "echo \"localhost\" > inventory"
+
+# Download galaxy dependencies if a requirement file for that TEST_SUITE exists
+  - if [ -f ${TEST_SUITE}-requirements.yml ]; then ansible-galaxy install -r ${TEST_SUITE}-requirements.yml; fi"
 
 #  - "ansible-lint tasks/main.yml"
 

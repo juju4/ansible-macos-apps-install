@@ -3,6 +3,18 @@
 - hosts: all
   vars:
     verbose: True
+    new_user_username:                        "targetuser"
+    new_user_fullname:                        "Target User"
+    new_user_shell:                           "/bin/zsh"
+    new_user_password_cleartext:              "target-user-password"
+    new_user_generate_ssh_key:                False
+    new_user_reset_password_on_login:         False
+    new_user_is_admin:                        True
+    new_user_update_path_for_all_shell_types: True
+    new_user_profile_picture_path:            ""
+    new_user_random_profile_picture:          False
+    target_user_id: "{{ new_user_username }}"
+    install_archives: "$HOME/Downloads"
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-69.0-SSL&os=osx&lang=en-US',
           f: 'firefox-69.0-SSL-en-US.dmg',
@@ -191,4 +203,5 @@
 #        }
 
   roles:
+    - marcomc.macos-new-user
     - juju4.macos_apps_install
