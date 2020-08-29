@@ -14,7 +14,7 @@
     new_user_profile_picture_path:            ""
     new_user_random_profile_picture:          False
     target_user_id: "{{ new_user_username }}"
-    install_archives: "$HOME/Downloads"
+    install_archives: "~/Downloads"
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-69.0-SSL&os=osx&lang=en-US',
           f: 'firefox-69.0-SSL-en-US.dmg',
