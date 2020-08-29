@@ -1,0 +1,194 @@
+---
+
+- hosts: all
+  vars:
+    verbose: True
+    macos_apps_install_list:
+      - { u: 'https://download.mozilla.org/?product=firefox-69.0-SSL&os=osx&lang=en-US',
+          f: 'firefox-69.0-SSL-en-US.dmg',
+          v: True,
+          s: 'bfa9ae88ac188276c9ed17ff2e5f6e2440d6513710a32002d51be9b620d3e71c',
+          n: 'Firefox',
+          t: 'app',
+          version: '69.0'
+        }
+      - { u: 'https://download.mozilla.org/?product=thunderbird-60.7.2-SSL&os=osx&lang=en-US',
+          f: 'thunderbird-60.7.2-SSL-fr.dmg',
+          v: True,
+          s: '66d937ee3db5d06d7982046e24f9340d60612889c15ef98b224726824376f910',
+          n: 'Thunderbird',
+          t: 'app',
+          version: '60.7.2'
+        }
+#      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg',
+#          v: True, s: '64d20453923386f48bffe1d7597036ed92e0121f88adc74a59a7ffb52f226bbc',
+#          n: 'Google Chrome',
+#          t: 'app',
+#          version: '76.0'
+#        }
+#      - { u: "https://download.documentfoundation.org/libreoffice/stable/6.2.4/mac/x86_64/LibreOffice_6.2.4_MacOS_x86-64.dmg",
+#          v: True,
+#          s: 'xxx',
+#          n: 'LibreOffice',
+#          t: 'app',
+#          version: '6.2.4'
+#        }
+#      - { u: 'http://get.videolan.org/vlc/3.0.7.1/macosx/vlc-3.0.7.1.dmg',
+#          v: False,
+#          s: 'xxx',
+#          n: 'VLC',
+#          t: 'app',
+#          m: '/Volumes/vlc-3.0.7.1',
+#          version: '3.0.7.1'
+#        }
+#      - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg',
+#          v: True, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9',
+#          n: 'ClipMenu',
+#          t: 'app',
+#          version: '0.4.3'
+#        }
+#      - { u: 'https://download.virtualbox.org/virtualbox/6.0.8/VirtualBox-6.0.8-130520-OSX.dmg',
+#          v: False,
+#          s: '8e3ed48842821adba3cb48c37a2ffea8e1446ea7a99446df6a42c681720a90dd',
+#          n: 'VirtualBox',
+#          t: 'pkg',
+#          version: '6.0.8'
+#        }
+## FIXME! requires recent apple/openssl to support tls1.2 only server
+##  https://github.com/jhaals/ansible-vault/issues/15
+#      - { u: 'https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.dmg',
+#          v: False,
+#          s: '07f7be3a457a8422d576e6371c8499fbdea411b02aecc7ea3c5258494514c5f2',
+#          n: 'Vagrant',
+#          t: 'pkg',
+#          version: '2.2.5',
+#          versioncmd: '/opt/vagrant/bin/vagrant --version | sed "s@Vagrant @@;"',
+#          to: '/opt/vagrant/bin/vagrant'
+#        }
+#      - { u: 'https://www.parallels.com/directdownload/pd13/',
+#          f: 'ParallelsDesktop-13.2.0-43213.dmg',
+#          v: True,
+#          s: 'xxx',
+#          n: 'Parallels Desktop',
+#          t: 'app',
+#          m: '/Volumes/Parallels Desktop 13',
+#          version: '13.2.0',
+#          versioncmd: '',
+#          to: '/Applications/Parallels Desktop.app'
+#        }
+#      - { u: 'https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg',
+#          v: True,
+#          s: '32e50e8f1e21542b847041711039fa78d44febfed466f834a9281c44d75cd6c3',
+#          n: 'XQuartz',
+#          t: 'pkg',
+#          m: '/Volumes/XQuartz-2.7.11',
+#          version: '2.7.11',
+#          to: '/Applications/Utilities/XQuartz.app'
+#        }
+#      - { u: 'https://1.eu.dl.wireshark.org/osx/Wireshark%203.0.2%20Intel%2064.dmg',
+#          f: 'Wireshark-3.0.2-Intel-64.dmg',
+#          v: True,
+#          s: '61f500c923b729be56b4bf453c2fca865cd921b8cc153da8a79d45a3f932bdd3',
+#          n: 'Wireshark',
+#          t: 'pkg',
+#          version: '3.0.2',
+#          exec_name: 'Wireshark 3.0.2 Intel 64.pkg'
+#        }
+#      - { u: 'https://download.docker.com/mac/stable/Docker.dmg',
+#          v: True,
+#          s: 'xxx',
+#          n: 'Docker',
+#          t: 'app',
+#          m: '/Volumes/Docker',
+#          version: '17.09.1',
+#          versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleShortVersionString" /Applications/Docker.app/Contents/Info.plist',
+#          to: '/Applications/Docker.app'
+#        }
+  ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+      - { u: 'https://github.com/prey/prey-node-client/releases/download/v1.8.3/prey-mac-1.8.3-x64.pkg',
+          v: False,
+          s: '112c1b38d5415fc86076783885c791eaa02dbce3051e8a7ba5c10bae8b980164',
+          n: 'Prey',
+          t: 'pkgonly',
+          version: '1.8.3',
+          env: "env API_KEY={{ prey_apikey | default('') }}",
+          to: '/usr/local/lib/prey/current/bin/prey',
+          versioncmd: '/usr/local/lib/prey/current/bin/prey --version'
+        }
+  ## osxfuse is required for veracrypt
+      - { u: 'https://github.com/osxfuse/osxfuse/releases/download/osxfuse-3.9.2/osxfuse-3.9.2.dmg',
+          v: True,
+          s: 'de45388f6aceb547f08112e24f2ed49a2160725ed4590adcc8488a5d5d3f0067',
+          n: 'FUSE',
+          t: 'pkg',
+          m: '/Volumes/FUSE for macOS',
+          version: '3.9.2',
+          to: '/Library/Filesystems/osxfuse.fs',
+          exec_name: 'FUSE for macOS.pkg',
+          versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleVersion" "/Library/Filesystems/osxfuse.fs/Contents/Info.plist"'
+        }
+      - { u: 'https://launchpad.net/veracrypt/trunk/1.23/+download/VeraCrypt_1.23.dmg',
+          v: True,
+          s: '8c5ba5e8a19de5a33461f3cd84617140736d7cb38e306d0ac4b1c058940227f3',
+          n: 'VeraCrypt',
+          t: 'pkg',
+          m: '/Volumes/VeraCrypt for OSX',
+          version: '1.23',
+          exec_name: 'VeraCrypt_Installer.pkg'
+        }
+      - { u: 'https://github.com/google/santa/releases/download/0.9.31/santa-0.9.31.dmg',
+          v: False,
+          s: '6843afe8a924c0a9498d07d40acac4d5daafa0177dbf70181bc6be97e0067645',
+          n: 'santa-0.9.31',
+          t: 'pkg',
+          version: '0.9.31',
+          versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"',
+          to: '/usr/local/bin/santactl'
+        }
+      - { u: 'https://pkg.osquery.io/darwin/osquery-3.3.2.pkg',
+          v: True,
+          s: '6ac1baa9bd13fcf3bd4c1b20a020479d51e26a8ec81783be7a8692d2c4a9926a',
+          n: 'osquery',
+          t: 'pkgonly',
+          version: '3.3.2',
+          versioncmd: '/usr/local/bin/osqueryi --version | sed "s/osqueryi version //"',
+          to: '/usr/local/bin/osqueryi'
+        }
+#      - { u: 'https://releases.gpgtools.org/GPG_Suite-2018.5.dmg',
+#          v: False,
+#          s: 'c66ecf48ccf709f704f02097cf9d68ba97b0efba24f7a0b7b46adfd1133cb86a'
+#        }
+      - { u: 'https://packages.chef.io/files/stable/inspec/4.18.51/mac_os_x/10.15/inspec-4.18.51-1.dmg',
+          v: True,
+          s: 'efbc8949c34ce12cd0f87bbee57b7535f0f3bc1705c47ac4c490909ec85e3aa5',
+          n: 'inspec',
+          t: 'pkg',
+          m: '/Volumes/InSpec',
+          version: '4.18.51',
+          exec_name: 'inspec-4.18.51-1.pkg',
+          to: '/opt/inspec/bin/inspec',
+          versioncmd: 'inspec --version 2>&1 | head -1'
+        }
+#        https://distfiles.macports.org/MacPorts/MacPorts-2.5.4-10.14-Mojave.pkg
+      - { u: 'https://distfiles.macports.org/MacPorts/MacPorts-2.5.4-10.13-HighSierra.pkg',
+          v: False,
+          s: '07c5c8a62e61c5cb8506cd3b9784dbb06a8fa48c3c6f1e3954f96a82fcb3b77c',
+          n: 'MacPorts',
+          t: 'pkgonly',
+          version: '2.5.4',
+          to: '/opt/local/bin/ports'
+        }
+#      - { u: '',
+#          f: '',
+#          v: True,
+#          s: 'aaaa',
+#          n: '',
+#          t: 'app',
+#          m: '/Volumes/app',
+#          version: '',
+#          versioncmd: '',
+#          to: '/Applications/example.app'
+#        }
+
+  roles:
+    - juju4.macos_apps_install
