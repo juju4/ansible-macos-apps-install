@@ -3,18 +3,26 @@
 os:
   - osx
 matrix:
-  osx_image:
-  # OS X 10.15
-    - xcode12
-  # OS X 10.14
-    - xcode11.2
-  # OS X 10.13
-    - xcode10.1
-  # OS X 10.12
-  #  - xcode9.2
-  env:
-    - TEST_SUITE='default'
-    - TEST_SUITE='target-user'
+  include:
+      # OS X 10.15
+    - osx_image: xcode12
+      env: TEST_SUITE='default'
+      # OS X 10.14
+    - osx_image: xcode11.2
+      env: TEST_SUITE='default'
+      # OS X 10.13
+    - osx_image: xcode10.1
+      env: TEST_SUITE='default'
+          # OS X 10.15
+    - osx_image: xcode12
+      env: TEST_SUITE='target-user'
+      # OS X 10.14
+    - osx_image: xcode11.2
+      env: TEST_SUITE='target-user'
+      # OS X 10.13
+    - osx_image: xcode10.1
+      env: TEST_SUITE='target-user'
+
 #language: python
 #python: "2.7"
 before_install:
