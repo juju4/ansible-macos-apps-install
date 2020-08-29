@@ -65,7 +65,7 @@
 
     - name: Versions comparison
       debug:
-        var: "{{ version | version( currentversion, '>') }}"
+        var: "{{ version is version( currentversion, '>') }}"
   # end block
   when:
     - verbose|bool
