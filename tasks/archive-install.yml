@@ -3,11 +3,11 @@
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
 
 - debug:
-    msg: "Archive Path {{pkg_path}}"
+    msg: "Archive Path {{ pkg_path }}"
   when: verbose|bool
 
 - debug:
-    msg: "Archive extension '{{archive_extension}}'"
+    msg: "Archive extension '{{ archive_extension }}'"
 
 - name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
   stat:
@@ -26,7 +26,7 @@
   # we want the super-user to remvoe the existing app in case it was installed by another user
   - name: Remove existing app if present
     file:
-      path: "{{ dest }}/{{app_basename}}"
+      path: "{{ dest }}/{{ app_basename }}"
       state: absent
     when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
   become: True

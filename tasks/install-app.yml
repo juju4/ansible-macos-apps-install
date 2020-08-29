@@ -25,13 +25,13 @@
   when: version != ''
 
 - debug:
-    msg: "Archives Path: {{install_archives}}'"
+    msg: "Archives Path: {{ install_archives }}'"
   when: verbose|bool
 - debug:
-    msg: "Package Name: {{app_archive}}'"
+    msg: "Package Name: {{ app_archive }}'"
   when: verbose|bool
 - debug:
-    msg: "Package Path: {{pkg_path}}'"
+    msg: "Package Path: {{ pkg_path }}'"
   when: verbose|bool
 
 - debug:
@@ -47,7 +47,7 @@
   when: version != '' and app.stat.exists is defined and not app.stat.exists
 
 - include: "macos-apps-version.yml
-            version_app_path='{{ dest }}/{{app_basename}}'
+            version_app_path='{{ dest }}/{{ app_basename }}'
             version_app_cmd='{{ versioncmd }}'
             version_app_default='0.01'
             version_app_plist_tag='{{ plist_tag }}'
