@@ -34,7 +34,7 @@
             app_url={{ item.u }}
             app_archive={{ item.f | default(item.u | basename) }}
             archive_extension={{ app_archive|default('') | splitext |  last }}
-            validate_certs={{ item.v | default(true) }}
+            validate_certs={{ item.v | default(True) }}
             checksum={{ item.s | default('')}}
             app_name={{ item.n }}
             installer_type={{ item.t|default('app') }}

@@ -4,14 +4,14 @@
 
 ## Note: some app are not installing here
 
-- name: Define Package Path
-  set_fact:
-    pkg_path: "{{ install_archives | expanduser  }}/{{ app_archive }}"
-    
 - name: Define app name to '{{ app_name }}.app'
   set_fact:
     app_basename: "{{ app_name }}.app"
   when: app_name is defined and app_name != ''
+
+- name: Define Package Path "{{ install_archives | expanduser  }}/{{ app_archive }}"
+  set_fact:
+    pkg_path: "{{ install_archives | expanduser  }}/{{ app_archive }}"
 
 - name: Define installer name to '{{ installer_name }}'
   set_fact:
@@ -25,15 +25,14 @@
   when: version != ''
 
 - debug:
-    msg: "Install Archive: {{install_archives}}'"
+    msg: "Archives Path: {{ install_archives }}'"
   when: verbose|bool
 - debug:
-    msg: "App Name: {{app_archive}}'"
+    msg: "Package Name: {{ app_archive }}'"
   when: verbose|bool
 - debug:
-    msg: "Package Path: {{pkg_path}}'"
+    msg: "Package Path: {{ pkg_path }}'"
   when: verbose|bool
-
 
 - debug:
     msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
@@ -48,7 +47,7 @@
   when: version != '' and app.stat.exists is defined and not app.stat.exists
 
 - include: "macos-apps-version.yml
-            version_app_path='{{ dest }}/{{app_basename}}'
+            version_app_path='{{ dest }}/{{ app_basename }}'
             version_app_cmd='{{ versioncmd }}'
             version_app_default='0.01'
             version_app_plist_tag='{{ plist_tag }}'
@@ -56,18 +55,21 @@
   when: version !='' and app is defined and app.stat.exists
 
 - block:
-    - name: debugging info
+    - name: Required version
       debug:
         var: version
 
-    - debug:
+    - name: Current version
+      debug:
         var: currentversion|default('')
-      when: app.stat.exists is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
 
-    - debug:
-        var: "{{ version | version( currentversion, '>') }}"
-      when: app.stat.exists is defined and app.stat.exists and versioncmd is defined and versioncmd != ""
-  when: verbose|bool
+    - name: Versions comparison
+      debug:
+        var: "{{ version is version( currentversion, '>') }}"
+  # end block
+  when:
+    - verbose|bool
+    - version !='' and app is defined and app.stat.exists
 
 - name: Already up-to-date!
   debug:

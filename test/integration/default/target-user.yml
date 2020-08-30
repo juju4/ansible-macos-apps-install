@@ -3,6 +3,11 @@
 - hosts: all
   vars:
     verbose: True
+    new_user_username:                        'targetuser'
+    new_user_fullname:                        'Target User'
+    new_user_shell:                           '/bin/zsh'
+    new_user_password_cleartext:              'target-user-password'
+    target_user_id:                           "{{ new_user_username }}"
     macos_apps_install_list:
       - { u: 'https://download.mozilla.org/?product=firefox-69.0-SSL&os=osx&lang=en-US',
           f: 'firefox-69.0-SSL-en-US.dmg',
@@ -189,6 +194,20 @@
 #          versioncmd: '',
 #          to: '/Applications/example.app'
 #        }
+  pre_tasks:
+    - name: Creating user "{{ new_user_username }}".
+      user:
+        name: "{{ new_user_username }}"
+        comment: "{{ new_user_fullname }}"
+        password: "{{ new_user_password_cleartext }}"
+        shell: '/bin/zsh'
+        home: "/Users/{{ new_user_username }}"
+        create_home: True
+        group: 'staff'
+        groups: 'admin'
+        append: True
+      register: new_user_created
+      become: yes
 
   roles:
     - juju4.macos_apps_install
