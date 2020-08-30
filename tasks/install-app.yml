@@ -28,6 +28,7 @@
     path: "{{ dest }}"
   register: app2
   when: version != '' and dest != '/Applications'
+- debub: var=app2 verbosity=1
 
 - debug:
     msg: "Archives Path: {{ install_archives }}'"
@@ -65,7 +66,7 @@
             "
   when: >
     version != '' and
-    app.stat.exists is defined and not app.stat.exists and
+    app.stat.exists is defined and app.stat.exists and
     (
       app2 is not defined or
       (app2.stat.exists is defined and not app2.stat.exists)
@@ -86,7 +87,13 @@
   # end block
   when:
     - verbose|bool
-    - version !='' and app is defined and app.stat.exists
+    - version !='' and (
+        app is defined and app.stat.exists or
+        (
+          app2 is not defined or
+          (app2.stat.exists is defined and not app2.stat.exists)
+        )
+      )
 
 - name: Already up-to-date!
   debug:
