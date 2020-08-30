@@ -61,14 +61,7 @@
 - block:
   - debug:
       msg: "This app will be installed as the user `{{ target_user_id }}`"
-  #   # Actions for `app` `zip` and `compressed installer types
-  # - name: Copy '{{ app_name }}' app to '{{ dest }}'
-  #   command: "cp -R '{{ mount_path }}/{{ app_basename }}' '{{ dest }}/'"
-  #   when:
-  #     - archive_extension == '.dmg'
-  #     - installer_type == 'app'
-  #   become: "{{ (target_user_id != ansible_user_id) | bool }}"
-  #   become_user: "{{ target_user_id }}"
+
   - name: Copy '{{ app_name }}' app to '{{ dest }}'
     copy:
       src: "{{ mount_path }}/{{ app_basename }}"

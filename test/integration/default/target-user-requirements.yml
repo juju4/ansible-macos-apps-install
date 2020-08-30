@@ -1,4 +1,0 @@
----
-- name: marcomc.macos-new-user
-  src: https://github.com/marcomc/ansible-role-macos-new-user.git
-  version: 'master'
