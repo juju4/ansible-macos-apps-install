@@ -112,7 +112,6 @@
       )
     )
     or version == '' or version is version( currentversion, '>')
-    version != '' and
 
 - include: archive-install.yml
   when: >
