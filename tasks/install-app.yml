@@ -23,6 +23,11 @@
     path: "{{ dest }}/{{ app_name }}.app"
   register: app
   when: version != ''
+- name: Check if '{{ dest }}' exists - custom to'
+  stat:
+    path: "{{ dest }}"
+  register: app
+  when: version != '' and dest != '/Applications'
 
 - debug:
     msg: "Archives Path: {{ install_archives }}'"
