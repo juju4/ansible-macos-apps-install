@@ -26,7 +26,7 @@
 - name: Check if '{{ dest }}' exists - custom to'
   stat:
     path: "{{ dest }}"
-  register: app
+  register: app2
   when: version != '' and dest != '/Applications'
 
 - debug:
@@ -49,7 +49,13 @@
 
 - debug:
     msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"
-  when: version != '' and app.stat.exists is defined and not app.stat.exists
+  when: >
+    version != '' and
+    app.stat.exists is defined and not app.stat.exists and
+    (
+      app2 is not defined or
+      (app2.stat.exists is defined and not app2.stat.exists)
+    )
 
 - include: "macos-apps-version.yml
             version_app_path='{{ dest }}/{{ app_basename }}'
@@ -57,7 +63,13 @@
             version_app_default='0.01'
             version_app_plist_tag='{{ plist_tag }}'
             "
-  when: version !='' and app is defined and app.stat.exists
+  when: >
+    version != '' and
+    app.stat.exists is defined and not app.stat.exists and
+    (
+      app2 is not defined or
+      (app2.stat.exists is defined and not app2.stat.exists)
+    )
 
 - block:
     - name: Required version
@@ -91,7 +103,24 @@
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
-  when: (app.stat.exists is defined and not app.stat.exists) or version == '' or version is version( currentversion, '>')
+  when: >
+    (
+      app.stat.exists is defined and not app.stat.exists and
+      (
+        app2 is not defined or
+        (app2.stat.exists is defined and not app2.stat.exists)
+      )
+    )
+    or version == '' or version is version( currentversion, '>')
+    version != '' and
 
 - include: archive-install.yml
-  when: (app.stat.exists is defined and not app.stat.exists) or version =='' or version is version( currentversion, '>')
+  when: >
+    (
+      app.stat.exists is defined and not app.stat.exists and
+      (
+        app2 is not defined or
+        (app2.stat.exists is defined and not app2.stat.exists)
+      )
+    )
+    or version == '' or version is version( currentversion, '>')
