@@ -54,8 +54,7 @@
     version != '' and
     app.stat.exists is defined and not app.stat.exists and
     (
-      app2 is not defined or
-      (app2.stat.exists is defined and not app2.stat.exists)
+      app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
 
 - include: "macos-apps-version.yml
@@ -68,8 +67,7 @@
     version != '' and
     app.stat.exists is defined and app.stat.exists and
     (
-      app2 is not defined or
-      (app2.stat.exists is defined and not app2.stat.exists)
+      app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
 
 - block:
@@ -90,8 +88,7 @@
     - version !='' and (
         app is defined and app.stat.exists or
         (
-          app2 is not defined or
-          (app2.stat.exists is defined and not app2.stat.exists)
+          app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
         )
       )
 
@@ -114,8 +111,7 @@
     (
       app.stat.exists is defined and not app.stat.exists and
       (
-        app2 is not defined or
-        (app2.stat.exists is defined and not app2.stat.exists)
+        app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
     or version == '' or version is version( currentversion, '>')
@@ -125,8 +121,7 @@
     (
       app.stat.exists is defined and not app.stat.exists and
       (
-        app2 is not defined or
-        (app2.stat.exists is defined and not app2.stat.exists)
+        app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
     or version == '' or version is version( currentversion, '>')
