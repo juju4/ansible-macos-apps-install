@@ -28,7 +28,7 @@
     path: "{{ dest }}"
   register: app2
   when: version != '' and dest != '/Applications'
-- debub: var=app2 verbosity=1
+- debug: var=app2 verbosity=1
 
 - debug:
     msg: "Archives Path: {{ install_archives }}'"
