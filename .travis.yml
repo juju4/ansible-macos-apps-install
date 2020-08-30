@@ -63,7 +63,7 @@ script:
 #  - "ansible-lint tasks/main.yml"
 
 # Check the role/playbook's syntax.
-  - "ansible-playbook -i inventory --syntax-check test/integration/default/${suite}.yml"
+  - "ansible-playbook -i inventory --syntax-check test/integration/${suite}/default.yml"
 
 # Run the role/playbook with ansible-playbook.
   - "ansible-playbook -i inventory --connection=local --become -vvvv test/integration/${suite}/default.yml"
