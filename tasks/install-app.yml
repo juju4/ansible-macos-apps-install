@@ -57,6 +57,10 @@
       app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
 
+- debug: msg="{{ app.stat.exists is defined and app.stat.exists }}"
+- debug: msg="{{ app2.stat.exists is not defined }}"
+- debug: msg="{{ (app2.stat.exists is defined and not app2.stat.exists) }}"
+
 - include: "macos-apps-version.yml
             version_app_path='{{ dest }}/{{ app_basename }}'
             version_app_cmd='{{ versioncmd }}'
