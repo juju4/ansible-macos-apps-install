@@ -94,7 +94,7 @@
   when:
     - verbose|bool
     - version !='' and (
-        app is defined and app.stat.exists
+        app is defined and app.stat is defined and app.stat.exists
       )
 
 - name: Already up-to-date!
