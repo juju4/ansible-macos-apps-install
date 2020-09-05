@@ -28,7 +28,9 @@
     file:
       path: "{{ dest }}/{{ app_basename }}"
       state: absent
-    when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
+    when: >
+      (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
+      and (dest != '/Applications' or app_basename|string)
   become: True
 
 - block:

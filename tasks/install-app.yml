@@ -7,7 +7,7 @@
 - name: Define app name to '{{ app_name }}.app'
   set_fact:
     app_basename: "{{ app_name }}.app"
-  when: app_name is defined and not app_name|string
+  when: app_name is defined and app_name|string
 
 - name: Define Package Path "{{ install_archives | expanduser  }}/{{ app_archive }}"
   set_fact:
@@ -16,7 +16,7 @@
 - name: Define installer name to '{{ installer_name }}'
   set_fact:
     app_basename: "{{ installer_name }}"
-  when: installer_name is defined and not installer_name|string
+  when: installer_name is defined and installer_name|string
 
 - name: Get properties of destination
   stat:
@@ -110,7 +110,7 @@
     dest: "{{ pkg_path }}"
     mode: '0644'
     validate_certs: "{{ validate_certs }}"
-    sha256sum: "{{ omit if (checksum is not defined or checksum == '') }}"
+    sha256sum: "{{ omit if (checksum is not defined or not checksum|string) }}"
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
