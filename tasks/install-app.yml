@@ -119,7 +119,8 @@
         app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
-    or version == '' or version is version( currentversion, '>')
+    or version == ''
+    or (currentversion is defined and version is version( currentversion, '>'))
 
 - include: archive-install.yml
   when: >
@@ -129,4 +130,5 @@
         app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
-    or version == '' or version is version( currentversion, '>')
+    or version == ''
+    or (currentversion is defined and version is version( currentversion, '>'))
