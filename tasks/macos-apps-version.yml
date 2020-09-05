@@ -7,7 +7,7 @@
 
 - debug:
     msg: "Using custom commant to retrieve App version for '{{ version_app_path }}' from Info.plist"
-  when: version_app_cmd is defined and version_app_cmd != ''
+  when: version_app_cmd is defined and version_app_cmd|string
 
 - block:
     - name: Check if '{{ version_app_path }}/Contents/Info.plist' exists
@@ -25,14 +25,14 @@
         version_app_cmd: "echo {{ version_app_default }}"
       when: not infoplist.stat.exists
 
-  when: version_app_cmd is not defined or version_app_cmd == ''
+  when: version_app_cmd is not defined or not version_app_cmd|string
 
 - name: Get current App version of {{ version_app_path }}
   shell: "{{ version_app_cmd }}"
   register: version_app_shell
   changed_when: False
   ignore_errors: True
-  when: app.stat.exists and version_app_cmd != ''
+  when: app.stat.exists and version_app_cmd|string
 
 - name: The current App version is '{{ version_app_shell.stdout }}'
   set_fact:
