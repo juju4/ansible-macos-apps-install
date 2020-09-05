@@ -18,11 +18,15 @@
     app_basename: "{{ installer_name }}"
   when: installer_name is defined and installer_name != ''
 
+- name: Get properties of destination
+  stat:
+    path: "{{ dest }}"
+  register: dest
 - name: Check if '{{ app_name }}' exists in '{{ dest }}'
   stat:
     path: "{{ dest }}/{{ app_name }}.app"
   register: app
-  when: version != ''
+  when: version != '' and dest.stat.isdir
 - name: Check if '{{ dest }}' exists - custom to'
   stat:
     path: "{{ dest }}"
