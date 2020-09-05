@@ -21,12 +21,12 @@
 - name: Get properties of destination
   stat:
     path: "{{ dest }}"
-  register: dest
+  register: dest_properties
 - name: Check if '{{ app_name }}' exists in '{{ dest }}'
   stat:
     path: "{{ dest }}/{{ app_name }}.app"
   register: app
-  when: version != '' and dest.stat.isdir
+  when: version != '' and dest_properties.stat.isdir
 - name: Check if '{{ dest }}' exists - custom to'
   stat:
     path: "{{ dest }}"
