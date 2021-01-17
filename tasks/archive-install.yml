@@ -21,6 +21,8 @@
   shell: |
     set -o pipefail
     yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'
+  args:
+    executable: /bin/bash
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
