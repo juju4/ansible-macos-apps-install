@@ -18,11 +18,7 @@
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
 - name: Mount dmg image '{{ app_archive }}'
   # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
-  shell: |
-    set -o pipefail
-    yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'
-  args:
-    executable: /bin/bash
+  shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"  # noqa 306
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
