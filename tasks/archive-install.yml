@@ -18,101 +18,102 @@
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
 - name: Mount dmg image '{{ app_archive }}'
   # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
-  shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"
+  shell: |
+    set -o pipefail
+    yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
 - block:
-  # we want the super-user to remvoe the existing app in case it was installed by another user
-  - name: Remove existing app if present
-    file:
-      path: "{{ dest }}/{{ app_basename }}"
-      state: absent
-    when: >
-      (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
-      and (dest != '/Applications' or app_basename|string)
+    # we want the super-user to remvoe the existing app in case it was installed by another user
+    - name: Remove existing app if present
+      file:
+        path: "{{ dest }}/{{ app_basename }}"
+        state: absent
+      when: >
+        (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
+        and (dest != '/Applications' or app_basename|string)
   become: True
 
 - block:
     # Actions for `installer` type
-  - fail:
-      msg: "'exec_name' (installer name), must be set to the installer path"
-    when: not installer_name|string
+    - name: Fatal - exec_name/installer path not provided
+      fail:
+        msg: "'exec_name' (installer name), must be set to the installer path"
+      when: not installer_name|string
 
-  - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
-    set_fact:
-      pkg_path: "{{ mount_path }}/{{ installer_name }}"
-    when: installer_name|string
-  # end block
+    - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
+      set_fact:
+        pkg_path: "{{ mount_path }}/{{ installer_name }}"
+      when: installer_name|string
   when: installer_type == 'installer'
 
 - block:
-  # Actions for `pkg` installers contained in DMG archives
-  - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
-    set_fact:
-      pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
-    when: not installer_name|string
+    # Actions for `pkg` installers contained in DMG archives
+    - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
+      set_fact:
+        pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
+      when: not installer_name|string
 
-  - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
-    set_fact:
-      pkg_path: "{{ mount_path }}/{{ installer_name }}"
-    when: installer_name|string
-  # end block
+    - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
+      set_fact:
+        pkg_path: "{{ mount_path }}/{{ installer_name }}"
+      when: installer_name|string
   when: installer_type == 'pkg'
 
 - block:
-  - debug:
-      msg: "This app will be installed as the user `{{ target_user_id }}`"
+    - debug:
+        msg: "This app will be installed as the user `{{ target_user_id }}`"
 
-  - name: Copy '{{ app_name }}' app to '{{ dest }}'
-    copy:
-      src: "{{ mount_path }}/{{ app_basename }}"
-      dest: "{{ dest }}/"
-      owner: "{{ target_user_id }}"
-    when:
-      - archive_extension == '.dmg'
-      - installer_type == 'app'
-    become: True
-  # become_user: "{{ target_user_id }}"
+    - name: Copy '{{ app_name }}' app to '{{ dest }}'
+      copy:
+        src: "{{ mount_path }}/{{ app_basename }}"
+        dest: "{{ dest }}/"
+        mode: '0644'
+        owner: "{{ target_user_id }}"
+      when:
+        - archive_extension == '.dmg'
+        - installer_type == 'app'
+      become: True
+      # become_user: "{{ target_user_id }}"
 
-  # if the archive is a compressed file the app will be extrated directly to it's destination
-  - name: Extract '{{ app_name }}' to {{ dest }}'
-    unarchive:
-      src: "{{ pkg_path }}"
-      dest: "{{ dest }}"
-      owner: "{{ target_user_id }}"
-    when:
-      - archive_extension != '.dmg'
-      - (installer_type == 'zip' or installer_type == 'compressed_archive')
-    ignore_errors: True
-    become: True
-  # end block
+    # if the archive is a compressed file the app will be extrated directly to it's destination
+    - name: Extract '{{ app_name }}' to {{ dest }}'
+      unarchive:
+        src: "{{ pkg_path }}"
+        dest: "{{ dest }}"
+        owner: "{{ target_user_id }}"
+        mode: '0755'
+      when:
+        - archive_extension != '.dmg'
+        - (installer_type == 'zip' or installer_type == 'compressed_archive')
+      ignore_errors: True
+      become: True
   when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
 
 
 - block:
-  # This block is run as super-user because pkg installation frequently contain
-  # system components that require the higher provileges to be installed in system paths
-  - debug:
-      msg: "This app will be installed with super-user privileges"
-  ## Note: env allow to pass variables like API_key for
-  ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
-  - name: Run install of "{{ app_name }}.pkg"
-    shell: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
-    ignore_errors: True
-  # end block
+    # This block is run as super-user because pkg installation frequently contain
+    # system components that require the higher provileges to be installed in system paths
+    - debug:
+        msg: "This app will be installed with super-user privileges"
+    ## Note: env allow to pass variables like API_key for
+    ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
+    - name: Run install of "{{ app_name }}.pkg"
+      command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
+      ignore_errors: True
   when: installer_type == 'pkg' or installer_type == 'pkgonly'
   become: True
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
 - block:
-  - debug:
-      msg: "This app will be installed as the user `{{ ansible_user_id }}`"
+    - debug:
+        msg: "This app will be installed as the user `{{ ansible_user_id }}`"
 
-  - name: Run interactive install of "{{ app_name }}"
-    shell: "{{ env }} open '{{ pkg_path | expanduser }}'"
-    ignore_errors: True
+    - name: Run interactive install of "{{ app_name }}"
+      command: "{{ env }} open '{{ pkg_path | expanduser }}'"
+      ignore_errors: True
   # end block
   when: installer_type == 'installer'
 

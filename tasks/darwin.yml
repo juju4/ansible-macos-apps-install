@@ -46,5 +46,5 @@
             env={{ item.env | default('') }}
             plist_tag={{ item.plist_tag | default('CFBundleShortVersionString') }}
             "
-            #pkg_path={{ install_archives | expanduser  }}/{{ app_archive }}
+  # pkg_path={{ install_archives | expanduser  }}/{{ app_archive }}
   with_items: "{{ macos_apps_install_list }}"

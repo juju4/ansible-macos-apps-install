@@ -12,7 +12,7 @@
           n: 'Firefox',
           t: 'app',
           version: '80.0'
-        }
+      }
       # https://www.thunderbird.net/en-US/thunderbird/all/
       - { u: 'https://download.mozilla.org/?product=thunderbird-78.2.1-SSL&os=osx&lang=en-US',
           f: 'thunderbird-78.2.1-SSL-fr.dmg',
@@ -21,98 +21,98 @@
           n: 'Thunderbird',
           t: 'app',
           version: '78.2.1'
-        }
+      }
       # https://www.google.com/chrome/, https://chromereleases.googleblog.com/
-#      - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg',
-#          v: True, s: 'xxx',
-#          n: 'Google Chrome',
-#          t: 'app',
-#          version: '86.0'
-#        }
+      # - { u: 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg',
+      #     v: True, s: 'xxx',
+      #     n: 'Google Chrome',
+      #     t: 'app',
+      #     version: '86.0'
+      # }
       # https://www.libreoffice.org/download/download/
-#      - { u: "https://www.libreoffice.org/donate/dl/mac-x86_64/7.0.0/en-US/LibreOffice_7.0.0_MacOS_x86-64.dmg",
-#          v: True,
-#          s: 'xxx',
-#          n: 'LibreOffice',
-#          t: 'app',
-#          version: '7.0.0'
-#        }
+      # - { u: "https://www.libreoffice.org/donate/dl/mac-x86_64/7.0.0/en-US/LibreOffice_7.0.0_MacOS_x86-64.dmg",
+      #     v: True,
+      #     s: 'xxx',
+      #     n: 'LibreOffice',
+      #     t: 'app',
+      #     version: '7.0.0'
+      # }
       # https://www.videolan.org/vlc/download-macosx.html
-#      - { u: 'http://get.videolan.org/vlc/3.0.11.1/macosx/vlc-3.0.11.1.dmg',
-#          v: False,
-#          s: 'xxx',
-#          n: 'VLC',
-#          t: 'app',
-#          m: '/Volumes/vlc-3.0.11.1',
-#          version: '3.0.11.1'
-#        }
-#      - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg',
-#          v: True, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9',
-#          n: 'ClipMenu',
-#          t: 'app',
-#          version: '0.4.3'
-#        }
+      # - { u: 'http://get.videolan.org/vlc/3.0.11.1/macosx/vlc-3.0.11.1.dmg',
+      #     v: False,
+      #     s: 'xxx',
+      #     n: 'VLC',
+      #     t: 'app',
+      #     m: '/Volumes/vlc-3.0.11.1',
+      #     version: '3.0.11.1'
+      # }
+      # - { u: 'https://dl.dropbox.com/u/1140644/clipmenu/ClipMenu_0.4.3.dmg',
+      #     v: True, s: 'd0d7ca6c23f51b2dfe78c7bb40bf2f212c21b3304b3eacde86112d8ef3e6bfb9',
+      #     n: 'ClipMenu',
+      #     t: 'app',
+      #     version: '0.4.3'
+      # }
       # https://www.virtualbox.org/wiki/Downloads
-#      - { u: 'https://download.virtualbox.org/virtualbox/6.1.12/VirtualBox-6.1.12-139181-OSX.dmg',
-#          v: False,
-#          s: 'xxx',
-#          n: 'VirtualBox',
-#          t: 'pkg',
-#          version: '6.1.12'
-#        }
+      # - { u: 'https://download.virtualbox.org/virtualbox/6.1.12/VirtualBox-6.1.12-139181-OSX.dmg',
+      #     v: False,
+      #     s: 'xxx',
+      #     n: 'VirtualBox',
+      #     t: 'pkg',
+      #     version: '6.1.12'
+      # }
       # https://www.vagrantup.com/downloads.html
-## FIXME! requires recent apple/openssl to support tls1.2 only server
-##  https://github.com/jhaals/ansible-vault/issues/15
-#      - { u: 'https://releases.hashicorp.com/vagrant/2.2.10/vagrant_2.2.10_x86_64.dmg',
-#          v: False,
-#          s: 'xxx',
-#          n: 'Vagrant',
-#          t: 'pkg',
-#          version: '2.2.10',
-#          versioncmd: '/opt/vagrant/bin/vagrant --version | sed "s@Vagrant @@;"',
-#          to: '/opt/vagrant/bin/vagrant'
-#        }
+      ## FIXME! requires recent apple/openssl to support tls1.2 only server
+      ##  https://github.com/jhaals/ansible-vault/issues/15
+      # - { u: 'https://releases.hashicorp.com/vagrant/2.2.10/vagrant_2.2.10_x86_64.dmg',
+      #     v: False,
+      #     s: 'xxx',
+      #     n: 'Vagrant',
+      #     t: 'pkg',
+      #     version: '2.2.10',
+      #     versioncmd: '/opt/vagrant/bin/vagrant --version | sed "s@Vagrant @@;"',
+      #     to: '/opt/vagrant/bin/vagrant'
+      # }
       # https://www.parallels.com/products/desktop/download/
-#      - { u: 'https://download.parallels.com/desktop/v16/16.0.0-48916/ParallelsDesktop-16.0.0-48916.dmg',
-#          f: 'ParallelsDesktop-16.0.0-48916.dmg',
-#          v: True,
-#          s: 'xxx',
-#          n: 'Parallels Desktop',
-#          t: 'app',
-#          m: '/Volumes/Parallels Desktop 16',
-#          version: '16.0.0',
-#          versioncmd: '',
-#          to: '/Applications/Parallels Desktop.app'
-#        }
-#      - { u: 'https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg',
-#          v: True,
-#          s: '32e50e8f1e21542b847041711039fa78d44febfed466f834a9281c44d75cd6c3',
-#          n: 'XQuartz',
-#          t: 'pkg',
-#          m: '/Volumes/XQuartz-2.7.11',
-#          version: '2.7.11',
-#          to: '/Applications/Utilities/XQuartz.app'
-#        }
+      # - { u: 'https://download.parallels.com/desktop/v16/16.0.0-48916/ParallelsDesktop-16.0.0-48916.dmg',
+      #     f: 'ParallelsDesktop-16.0.0-48916.dmg',
+      #     v: True,
+      #     s: 'xxx',
+      #     n: 'Parallels Desktop',
+      #     t: 'app',
+      #     m: '/Volumes/Parallels Desktop 16',
+      #     version: '16.0.0',
+      #     versioncmd: '',
+      #     to: '/Applications/Parallels Desktop.app'
+      # }
+      # - { u: 'https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg',
+      #     v: True,
+      #     s: '32e50e8f1e21542b847041711039fa78d44febfed466f834a9281c44d75cd6c3',
+      #     n: 'XQuartz',
+      #     t: 'pkg',
+      #     m: '/Volumes/XQuartz-2.7.11',
+      #     version: '2.7.11',
+      #     to: '/Applications/Utilities/XQuartz.app'
+      # }
       # https://www.wireshark.org/download.html
-#      - { u: 'https://1.na.dl.wireshark.org/osx/Wireshark%203.2.6%20Intel%2064.dmg',
-#          f: 'Wireshark-3.2.6-Intel-64.dmg',
-#          v: True,
-#          s: 'xxx',
-#          n: 'Wireshark',
-#          t: 'pkg',
-#          version: '3.2.6',
-#          exec_name: 'Wireshark 3.2.6 Intel 64.pkg'
-#        }
-#      - { u: 'https://download.docker.com/mac/stable/Docker.dmg',
-#          v: True,
-#          s: 'xxx',
-#          n: 'Docker',
-#          t: 'app',
-#          m: '/Volumes/Docker',
-#          version: '17.09.1',
-#          versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleShortVersionString" /Applications/Docker.app/Contents/Info.plist',
-#          to: '/Applications/Docker.app'
-#        }
+      # - { u: 'https://1.na.dl.wireshark.org/osx/Wireshark%203.2.6%20Intel%2064.dmg',
+      #     f: 'Wireshark-3.2.6-Intel-64.dmg',
+      #     v: True,
+      #     s: 'xxx',
+      #     n: 'Wireshark',
+      #     t: 'pkg',
+      #     version: '3.2.6',
+      #     exec_name: 'Wireshark 3.2.6 Intel 64.pkg'
+      # }
+      # - { u: 'https://download.docker.com/mac/stable/Docker.dmg',
+      #     v: True,
+      #     s: 'xxx',
+      #     n: 'Docker',
+      #     t: 'app',
+      #     m: '/Volumes/Docker',
+      #     version: '17.09.1',
+      #     versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleShortVersionString" /Applications/Docker.app/Contents/Info.plist',
+      #     to: '/Applications/Docker.app'
+      # }
       # https://preyproject.com/download/
       ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
       - { u: 'https://downloads.preyproject.com/prey-client-releases/node-client/1.9.5/prey-mac-1.9.5-x64.pkg',
@@ -124,7 +124,7 @@
           env: "env API_KEY={{ prey_apikey | default('') }}",
           to: '/usr/local/lib/prey/current/bin/prey',
           versioncmd: '/usr/local/lib/prey/current/bin/prey --version'
-        }
+      }
       # https://github.com/osxfuse/osxfuse/releases/
       ## osxfuse is required for veracrypt
       - { u: 'https://github.com/osxfuse/osxfuse/releases/download/osxfuse-3.11.0/osxfuse-3.11.0.dmg',
@@ -137,7 +137,7 @@
           to: '/Library/Filesystems/osxfuse.fs',
           exec_name: 'FUSE for macOS.pkg',
           versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleVersion" "/Library/Filesystems/osxfuse.fs/Contents/Info.plist"'
-        }
+      }
       - { u: 'https://launchpad.net/veracrypt/trunk/1.24-update7/+download/VeraCrypt_1.24-Update7.dmg',
           v: True,
           s: '9F97436D3967462C28A1C1626EC2D230D121F60D42999101D42E7DD3D4D33336',
@@ -146,7 +146,7 @@
           m: '/Volumes/VeraCrypt for OSX',
           version: '1.24',
           exec_name: 'VeraCrypt_Installer.pkg'
-        }
+      }
       - { u: 'https://github.com/google/santa/releases/download/1.13/santa-1.13.dmg',
           v: False,
           s: '37b3f9acfd02b4e1b23bf9e3288f9b14f350bbdbb54694fc8b07ee4e81b23057',
@@ -155,7 +155,7 @@
           version: '1.13',
           versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"',
           to: '/usr/local/bin/santactl'
-        }
+      }
       - { u: 'https://pkg.osquery.io/darwin/osquery-4.4.0.pkg',
           v: True,
           s: '6ecb24891ed65b486962dd640a4313bc168ecca4d757bfd486fb5bf9ef6390dd',
@@ -164,12 +164,12 @@
           version: '4.4.0',
           versioncmd: '/usr/local/bin/osqueryi --version | sed "s/osqueryi version //"',
           to: '/usr/local/bin/osqueryi'
-        }
+      }
       # https://gpgtools.org/
-#      - { u: 'https://releases.gpgtools.org/GPG_Suite-2020.1.dmg',
-#          v: False,
-#          s: 'xxx'
-#        }
+      # - { u: 'https://releases.gpgtools.org/GPG_Suite-2020.1.dmg',
+      #     v: False,
+      #     s: 'xxx'
+      # }
       # https://downloads.chef.io/products/inspec
       - { u: 'https://packages.chef.io/files/stable/inspec/4.22.22/mac_os_x/11.0/inspec-4.22.22-1.dmg',
           v: True,
@@ -181,18 +181,18 @@
           exec_name: 'inspec-4.22.22-1.pkg',
           to: '/opt/inspec/bin/inspec',
           versioncmd: 'inspec --version 2>&1 | head -1'
-        }
-#      - { u: '',
-#          f: '',
-#          v: True,
-#          s: 'aaaa',
-#          n: '',
-#          t: 'app',
-#          m: '/Volumes/app',
-#          version: '',
-#          versioncmd: '',
-#          to: '/Applications/example.app'
-#        }
+      }
+      # - { u: '',
+      #     f: '',
+      #     v: True,
+      #     s: 'aaaa',
+      #     n: '',
+      #     t: 'app',
+      #     m: '/Volumes/app',
+      #     version: '',
+      #     versioncmd: '',
+      #     to: '/Applications/example.app'
+      # }
   pre_tasks:
     - name: Macos 10.15 | Application list
       set_fact:
@@ -205,7 +205,7 @@
               t: 'pkgonly',
               version: '2.6.3',
               to: '/opt/local/bin/ports'
-            }
+          }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '15'
     - name: Macos 10.14 | Application list
       set_fact:
@@ -218,7 +218,7 @@
               t: 'pkgonly',
               version: '2.6.3',
               to: '/opt/local/bin/ports'
-            }
+          }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '14'
     - name: Macos 10.13 | Application list
       set_fact:
@@ -231,7 +231,7 @@
               t: 'pkgonly',
               version: '2.6.3',
               to: '/opt/local/bin/ports'
-            }
+          }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '13'
     - name: Macos 10.12 | Application list
       set_fact:
@@ -244,7 +244,7 @@
               t: 'pkgonly',
               version: '2.6.3',
               to: '/opt/local/bin/ports'
-            }
+          }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '12'
     - name: Macos 10.11 | Application list
       set_fact:
@@ -258,7 +258,7 @@
               version: '2.6.3',
               versioncmd: '',
               to: '/opt/local/bin/ports'
-            }
+          }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '11'
   roles:
     - juju4.macos_apps_install

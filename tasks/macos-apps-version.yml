@@ -17,18 +17,18 @@
 
     - name: Define command to retrieve App version for '{{ version_app_path }}' from Info.plist
       set_fact:
-        version_app_cmd: "/usr/libexec/PlistBuddy -c 'print :{{ version_app_plist_tag }}'  '{{ version_app_path }}/Contents/Info.plist'"
+        version_app_cmd: "/usr/libexec/PlistBuddy -c 'print :{{ version_app_plist_tag }}'  '{{ version_app_path }}/Contents/Info.plist'"
       when: infoplist.stat.exists
 
     - name: Force update/install if no App command version
       set_fact:
-        version_app_cmd: "echo {{ version_app_default }}"
+        version_app_cmd: "echo {{ version_app_default }}"
       when: not infoplist.stat.exists
 
   when: version_app_cmd is not defined or not version_app_cmd|string
 
 - name: Get current App version of {{ version_app_path }}
-  shell: "{{ version_app_cmd }}"
+  command: "{{ version_app_cmd }}"
   register: version_app_shell
   changed_when: False
   ignore_errors: True
