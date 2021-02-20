@@ -32,6 +32,12 @@ jobs:
           python3 -c 'import ssl; ssl.PROTOCOL_TLSv1_2'
           python3 -m pip install --upgrade pip
           pip3 install ansible-lint flake8 yamllint
+          which ansible
+          pip3 install ansible
+          pip3 show ansible
+          ls -l $HOME/.local/bin || true
+          ls -l /opt/hostedtoolcache/Python/3.9.1/x64/bin || true
+          echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
           ansible --version
           cd $GITHUB_WORKSPACE/juju4.macos_apps_install
           [ -f get-dependencies.sh ] && sh -x get-dependencies.sh
