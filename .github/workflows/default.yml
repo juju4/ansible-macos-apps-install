@@ -42,10 +42,13 @@ jobs:
           cd $GITHUB_WORKSPACE/juju4.macos_apps_install
           [ -f get-dependencies.sh ] && sh -x get-dependencies.sh
           { echo '[defaults]'; echo 'callback_whitelist = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
-      - name: yamllint
+      - name: Environment
         run: |
           pwd
-          find .
+          env
+          find . -ls
+      - name: yamllint
+        run: |
           cd $GITHUB_WORKSPACE/juju4.macos_apps_install && yamllint .
       - name: ansible-lint
         run: |
