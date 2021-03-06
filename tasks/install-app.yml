@@ -114,6 +114,8 @@
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
+  register: dl_result
+  until: dl_result is success
   when: >
     (
       app.stat.exists is defined and not app.stat.exists and
