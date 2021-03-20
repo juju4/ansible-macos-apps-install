@@ -1,6 +1,7 @@
 ---
 
-- debug: var=macos_apps_install_list
+- name: Debug | macos_apps_install_list
+  debug: var=macos_apps_install_list
   when: verbose|bool
 
 - name: "Ensure download directory {{ install_archives | expanduser }} exists"

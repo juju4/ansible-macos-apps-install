@@ -2,11 +2,13 @@
 ## inspired from https://github.com/MWGriffin/ansible-playbooks/blob/master/install/dmg.yaml
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
 
-- debug:
+- name: Debug | archive path
+  debug:
     msg: "Archive Path {{ pkg_path }}"
   when: verbose|bool
 
-- debug:
+- name: Debug | archive extension
+  debug:
     msg: "Archive extension '{{ archive_extension }}'"
 
 - name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
@@ -60,7 +62,8 @@
   when: installer_type == 'pkg'
 
 - block:
-    - debug:
+    - name: INFO
+      debug:
         msg: "This app will be installed as the user `{{ target_user_id }}`"
 
     - name: Copy '{{ app_name }}' app to '{{ dest }}'
@@ -93,7 +96,8 @@
 - block:
     # This block is run as super-user because pkg installation frequently contain
     # system components that require the higher provileges to be installed in system paths
-    - debug:
+    - name: INFO
+      debug:
         msg: "This app will be installed with super-user privileges"
     ## Note: env allow to pass variables like API_key for
     ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
@@ -106,7 +110,8 @@
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
 - block:
-    - debug:
+    - name: INFO
+      debug:
         msg: "This app will be installed as the user `{{ ansible_user_id }}`"
 
     - name: Run interactive install of "{{ app_name }}"

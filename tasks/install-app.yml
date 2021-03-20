@@ -32,27 +32,34 @@
     path: "{{ dest }}"
   register: app2
   when: version|string and dest != '/Applications'
-- debug: var=app2 verbosity=1
+- name: Debug | app2
+  debug: var=app2 verbosity=1
 
-- debug:
+- name: Debug | archives path
+  debug:
     msg: "Archives Path: {{ install_archives }}'"
   when: verbose|bool
-- debug:
+- name: Debug | package name
+  debug:
     msg: "Package Name: {{ app_archive }}'"
   when: verbose|bool
-- debug:
+- name: Debug | package path
+  debug:
     msg: "Package Path: {{ pkg_path }}'"
   when: verbose|bool
 
-- debug:
+- name: INFO
+  debug:
     msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
   when: version|string
 
-- debug:
+- name: INFO
+  debug:
     msg: "The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version"
   when: not version|string
 
-- debug:
+- name: INFO
+  debug:
     msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"
   when: >
     version|string and
@@ -60,10 +67,6 @@
     (
       app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
-
-- debug: msg="{{ app.stat.exists is defined and app.stat.exists }}"
-- debug: msg="{{ app2.stat.exists is not defined }}"
-- debug: msg="{{ (app2.stat.exists is defined and not app2.stat.exists) }}"
 
 - include: "macos-apps-version.yml
             version_app_path='{{ dest }}/{{ app_basename }}'

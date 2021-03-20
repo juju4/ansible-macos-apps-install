@@ -1,11 +1,15 @@
 ---
 - block:
-    - debug: var=version_app_cmd
-    - debug: var=version_app_default
-    - debug: var=version_app_plist_tag
+    - name: Debug | version_app_cmd
+      debug: var=version_app_cmd
+    - name: Debug | version_app_default
+      debug: var=version_app_default
+    - name: Debug | version_app_plist_tag
+      debug: var=version_app_plist_tag
   when: verbose is defined and verbose
 
-- debug:
+- name: INFO
+  debug:
     msg: "Using custom commant to retrieve App version for '{{ version_app_path }}' from Info.plist"
   when: version_app_cmd is defined and version_app_cmd|string
 
