@@ -53,7 +53,7 @@ macos_apps_install_list:
       n: 'Firefox',
       t: 'app',
       version: '50.1.0'
-    }    
+    }
     - { u: 'http://dl.paragon-software.com/demo/ntfsmac15_trial.dmg',
       f: 'ntfsmac15_trial.dmg',
       n: 'NTFS for Mac',
@@ -64,15 +64,15 @@ macos_apps_install_list:
   - { u: 'https://some.app.com/download/link', # REQUIRED # Archive Download URL
       f: 'archive_file.dmg',                   # REQUIRED # Archive File Name (how it will be saved with)
       n: 'My Fancy App',                       # REQUIRED # Name of the application also used for the .app file
-      exec_name: '',                           # OPTIONAL # Name of the installed file if it is not an .app         
+      exec_name: '',                           # OPTIONAL # Name of the installed file if it is not an .app
       env: '',                                 # OPTIONAL # Environment variables required by the installer
-      version: '1.0.2',                        # OPTIONAL # Required Application Version         
-      t: 'app',                                # OPTIONAL # Installer type         
+      version: '1.0.2',                        # OPTIONAL # Required Application Version
+      t: 'app',                                # OPTIONAL # Installer type
       m: '/Volumes/My Fancy App',              # OPTIONAL # Name of the archive mount point when different than application name or when wanting a custom name
       to: '/Applications',                     # OPTIONAL # Destination name for the application
       versioncmd: '',                          # OPTIONAL # Specific command to retrieve the currently          installed application version
       plist_tag: '',                           # OPTIONAL # Plist tag that identify the application version
-      v: True,                                 # OPTIONAL # Toggle file integrity verification after download         
+      v: True,                                 # OPTIONAL # Toggle file integrity verification after download
       s: '63c5610...a20e2a',                   # OPTIONAL # Checksum value for file integrity verification
     }
 
@@ -83,7 +83,7 @@ macos_apps_install_list:
 
 * `app`: .app file contained in a DMG archive
 * `installer`: .app/exec interactive installer contained in a DMG file
-  * requires the use of `exec_name:` to define the name of the installer file  
+  * requires the use of `exec_name:` to define the name of the installer file
 * `pkg`: .pkg installer contained in a DMG file
 * `pkgonly`: .pkg installer NOT contained in a DMG or compressed archive
 * `zip`|`compressed_archive`: application contained in any kind of compressed archive
