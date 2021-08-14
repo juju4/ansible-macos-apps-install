@@ -88,7 +88,7 @@
       when:
         - archive_extension != '.dmg'
         - (installer_type == 'zip' or installer_type == 'compressed_archive')
-      ignore_errors: True
+      failed_when: false
       become: True
   when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
 
@@ -103,7 +103,7 @@
     ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
     - name: Run install of "{{ app_name }}.pkg"
       command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
-      ignore_errors: True
+      failed_when: false
   when: installer_type == 'pkg' or installer_type == 'pkgonly'
   become: True
 
@@ -116,7 +116,7 @@
 
     - name: Run interactive install of "{{ app_name }}"
       command: "{{ env }} open '{{ pkg_path | expanduser }}'"
-      ignore_errors: True
+      failed_when: false
   # end block
   when: installer_type == 'installer'
 

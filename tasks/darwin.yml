@@ -9,12 +9,16 @@
     dest: "{{ install_archives | expanduser }}"
     state: directory
     mode: '0755'
+  when:
+    - install_archives != '/tmp'
+    - install_archives != '/private/tmp'
+    - install_archives != '/Users/Shared'
 
 ## https://github.com/ansible/ansible/issues/18894
 - name: Check if pip available
   stat:
     path: "{{ pip_path }}"
-  register: hasPip
+  register: has_pip
 
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
   pip:
@@ -26,7 +30,7 @@
       - ndg-httpsclient>=0.4.2
     state: present
     executable: "{{ pip_path }}"
-  when: hasPip.stat.exists and ansible_distribution_version.split('.')[1]|int <= 11
+  when: has_pip.stat.exists and ansible_distribution_version.split('.')[1]|int <= 11
   register: pkg_result
   until: pkg_result is success
 
