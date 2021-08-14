@@ -10,9 +10,7 @@ It is idempotent and will only update application if version is higher than curr
 
 ### Ansible
 It was tested on the following versions:
- * 1.9
- * 2.0
- * 2.2
+1.9 to 2.11
 
 ### Operating systems
 
@@ -128,11 +126,15 @@ See: http://help.preyproject.com/article/188-prey-unattended-install-for-compute
 
 ## Continuous integration
 
-This role has a travis basic test (for github) only.
-
+This role has a GitHub Action pipeline.
 
 ## Troubleshooting & Known issues
 
+## Alternatives
+
+* [geerlingguy.mac.homebrew](https://github.com/geerlingguy/ansible-collection-mac/blob/master/roles/homebrew/README.md)
+* [geerlingguy.mac.mas](https://github.com/geerlingguy/ansible-collection-mac/blob/master/roles/mas/README.md)
+* Enterprise Mobile Device Management (Jamf, Intune...)
 
 ## License
 
