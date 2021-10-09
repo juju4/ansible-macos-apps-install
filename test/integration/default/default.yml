@@ -127,41 +127,41 @@
       }
       # https://github.com/osxfuse/osxfuse/releases/
       ## osxfuse is required for veracrypt
-      - { u: 'https://github.com/osxfuse/osxfuse/releases/download/osxfuse-3.11.0/osxfuse-3.11.0.dmg',
-          v: True,
-          s: '6e4adf8e939bb336ce51c28c71249019c1499ebdba4abddc7cc1ea5154a1feaf',
+      - { u: 'https://github.com/osxfuse/osxfuse/releases/download/osxfuse-4.2.0/osxfuse-4.2.0.dmg',
+          v: true,
+          s: 'bf413e3aae887b6e8e8f8ad46152eb34575b7ff7f90d6cc55735ad00c5a4c7a6',
           n: 'FUSE',
           t: 'pkg',
           m: '/Volumes/FUSE for macOS',
-          version: '3.11.0',
+          version: '4.2.0',
           to: '/Library/Filesystems/osxfuse.fs',
           exec_name: 'FUSE for macOS.pkg',
           versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleVersion" "/Library/Filesystems/osxfuse.fs/Contents/Info.plist"'
       }
-      - { u: 'https://launchpad.net/veracrypt/trunk/1.24-update7/+download/VeraCrypt_1.24-Update7.dmg',
-          v: True,
-          s: '9F97436D3967462C28A1C1626EC2D230D121F60D42999101D42E7DD3D4D33336',
+      - { u: 'https://launchpad.net/veracrypt/trunk/1.24-update8/+download/VeraCrypt_1.24-Update8.dmg',
+          v: true,
+          s: '9edeae9fbf7f1b2eb91ce55ff82481bfd4c099e85c3c88cb6d6dd91b460a3a6b',
           n: 'VeraCrypt',
           t: 'pkg',
           m: '/Volumes/VeraCrypt for OSX',
           version: '1.24',
           exec_name: 'VeraCrypt_Installer.pkg'
       }
-      - { u: 'https://github.com/google/santa/releases/download/1.13/santa-1.13.dmg',
-          v: False,
-          s: '37b3f9acfd02b4e1b23bf9e3288f9b14f350bbdbb54694fc8b07ee4e81b23057',
+      - { u: 'https://github.com/google/santa/releases/download/2021.5/santa-2021.5.dmg',
+          v: false,
+          s: 'a54f94ea242ad48d219c80415a86d6b7a44a43075162d1dcbe100542417277ae',
           n: 'santa-1.13',
           t: 'pkg',
           version: '1.13',
           versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"',
           to: '/usr/local/bin/santactl'
       }
-      - { u: 'https://pkg.osquery.io/darwin/osquery-4.4.0.pkg',
-          v: True,
-          s: '6ecb24891ed65b486962dd640a4313bc168ecca4d757bfd486fb5bf9ef6390dd',
+      - { u: 'https://pkg.osquery.io/darwin/osquery-5.0.1.pkg',
+          v: true,
+          s: 'ec58996e64637d861ccead8dc6bc8865662728f6e5bc2694a3c92f0f4a371095',
           n: 'osquery',
           t: 'pkgonly',
-          version: '4.4.0',
+          version: '5.0.1',
           versioncmd: '/usr/local/bin/osqueryi --version | sed "s/osqueryi version //"',
           to: '/usr/local/bin/osqueryi'
       }
@@ -171,16 +171,15 @@
       #     s: 'xxx'
       # }
       # https://downloads.chef.io/products/inspec
-      - { u: 'https://packages.chef.io/files/stable/inspec/4.22.22/mac_os_x/11.0/inspec-4.22.22-1.dmg',
-          v: True,
-          s: '7bc70947949c5a29c45cfe790092495fda5137ec6b13b241cab926e195b5df81',
+      - { u: 'https://packages.chef.io/files/stable/inspec/4.38.9/mac_os_x/10.15/inspec-4.38.9-1.x86_64.dmg',
+          v: true,
+          s: 'bc5772b1db8e13f2766390e995dbda1651813d1b1737c88af47b8f217acb03b0',
           n: 'inspec',
           t: 'pkg',
           m: '/Volumes/InSpec',
-          version: '4.22.22',
-          exec_name: 'inspec-4.22.22-1.pkg',
-          to: '/opt/inspec/bin/inspec',
-          versioncmd: 'inspec --version 2>&1 | head -1'
+          version: '4.38.9',
+          exec_name: 'inspec-4.38.9-1.pkg',
+          versioncmd: 'inspec --version 2>&1 | tail -1'
       }
       # - { u: '',
       #     f: '',
@@ -194,33 +193,46 @@
       #     to: '/Applications/example.app'
       # }
   pre_tasks:
-    - name: Macos 10.15 | Application list
+    - name: Macos 11 | set fact
       set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
-          - { u: 'https://distfiles.macports.org/MacPorts/MacPorts-2.6.3-10.15-Catalina.pkg',
+          - { u: 'https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-11-BigSur.pkg',
               v: false,
-              s: 'dd6e491e6da1e1388defbae867b2ff4266246c2b639d84794e9f3bcc505a1eb8',
+              s: '72189c01f8a21f33869636061dc95b51b20428fa3937518e375fb6e8dd7e4fe3',
               n: 'MacPorts',
               t: 'pkgonly',
-              version: '2.6.3',
+              version: '2.7.1',
+              to: '/opt/local/bin/ports'
+          }
+      when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[0] == '11'
+    - name: Macos 10.15 | set fact
+      set_fact:
+        macos_apps_install_list:
+          - "{{ macos_apps_install_list }}"
+          - { u: 'https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-10.15-Catalina.pkg',
+              v: false,
+              s: 'cd312d9755ec822630e4c26c6bb863f87fdac2e4d71d5d5f24cea2b20a7bc0f1',
+              n: 'MacPorts',
+              t: 'pkgonly',
+              version: '2.7.1',
               to: '/opt/local/bin/ports'
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '15'
-    - name: Macos 10.14 | Application list
+    - name: Macos 10.14 | set fact
       set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
-          - { u: 'https://distfiles.macports.org/MacPorts/MacPorts-2.6.3-10.14-Mojave.pkg',
+          - { u: 'https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-10.14-Mojave.pkg',
               v: false,
-              s: '786352d150f207649526dd1773706f4b32868ed97297a25a2efa618d51d7a582',
+              s: '29e2ff54749819dbdb8a6fd2f6f5ba56f467dc554f4fc2c145fd64b607d84272',
               n: 'MacPorts',
               t: 'pkgonly',
-              version: '2.6.3',
+              version: '2.7.1',
               to: '/opt/local/bin/ports'
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '14'
-    - name: Macos 10.13 | Application list
+    - name: Macos 10.13 | set fact
       set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
@@ -233,7 +245,7 @@
               to: '/opt/local/bin/ports'
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '13'
-    - name: Macos 10.12 | Application list
+    - name: Macos 10.12 | set fact
       set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
@@ -246,7 +258,7 @@
               to: '/opt/local/bin/ports'
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '12'
-    - name: Macos 10.11 | Application list
+    - name: Macos 10.11 | set fact
       set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
