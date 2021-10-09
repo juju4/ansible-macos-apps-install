@@ -3,6 +3,7 @@
 - hosts: all
   vars:
     verbose: True
+    version: True
     macos_apps_install_list:
       # https://www.mozilla.org/en-US/firefox/all/
       - { u: 'https://download.mozilla.org/?product=firefox-80.0-SSL&os=osx&lang=en-US',
