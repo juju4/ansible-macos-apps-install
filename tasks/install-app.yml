@@ -76,7 +76,7 @@
             "
   when: >
     version|string and
-    app.stat.exists is defined and app.stat.exists and
+    ((app.stat.exists is defined and app.stat.exists) or (app.skipped is defined and app.skipped)) and
     (
       app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
