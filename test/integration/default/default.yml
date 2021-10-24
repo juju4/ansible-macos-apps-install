@@ -128,13 +128,13 @@
       }
       # https://github.com/osxfuse/osxfuse/releases/
       ## osxfuse is required for veracrypt
-      - { u: 'https://github.com/osxfuse/osxfuse/releases/download/osxfuse-4.2.0/osxfuse-4.2.0.dmg',
-          v: true,
-          s: 'bf413e3aae887b6e8e8f8ad46152eb34575b7ff7f90d6cc55735ad00c5a4c7a6',
+      - { u: 'https://github.com/osxfuse/osxfuse/releases/download/macfuse-4.2.1/macfuse-4.2.1.dmg',
+          v: True,
+          s: 'bd3abba91a8c16005eb3937ad492e49275e60db429bbecd30d54769c191e0699 ',
           n: 'FUSE',
           t: 'pkg',
           m: '/Volumes/FUSE for macOS',
-          version: '4.2.0',
+          version: '4.2.1',
           to: '/Library/Filesystems/osxfuse.fs',
           exec_name: 'FUSE for macOS.pkg',
           versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleVersion" "/Library/Filesystems/osxfuse.fs/Contents/Info.plist"'
@@ -148,12 +148,12 @@
           version: '1.24',
           exec_name: 'VeraCrypt_Installer.pkg'
       }
-      - { u: 'https://github.com/google/santa/releases/download/2021.5/santa-2021.5.dmg',
+      - { u: 'https://github.com/google/santa/releases/download/2021.7/santa-2021.7.dmg',
           v: false,
-          s: 'a54f94ea242ad48d219c80415a86d6b7a44a43075162d1dcbe100542417277ae',
-          n: 'santa-1.13',
+          s: '7682a855aa2517011fe08eb5c1f420c1dbe2ab6ea3a732bbf915267fda203754',
+          n: 'santa-2021.7',
           t: 'pkg',
-          version: '1.13',
+          version: '2021.7',
           versioncmd: '/usr/local/bin/santactl version | sed "1 s/.*| //;q"',
           to: '/usr/local/bin/santactl'
       }
@@ -172,14 +172,14 @@
       #     s: 'xxx'
       # }
       # https://downloads.chef.io/products/inspec
-      - { u: 'https://packages.chef.io/files/stable/inspec/4.38.9/mac_os_x/10.15/inspec-4.38.9-1.x86_64.dmg',
+      - { u: 'https://packages.chef.io/files/stable/inspec/4.46.13/mac_os_x/11/inspec-4.46.13-1.x86_64.dmg',
           v: true,
-          s: 'bc5772b1db8e13f2766390e995dbda1651813d1b1737c88af47b8f217acb03b0',
+          s: 'cf117764cd1e67ef4d161d6ad8bd0e713d25d2e6afaaea0d734e6707eccd2e58',
           n: 'inspec',
           t: 'pkg',
           m: '/Volumes/InSpec',
-          version: '4.38.9',
-          exec_name: 'inspec-4.38.9-1.pkg',
+          version: '4.46.13',
+          exec_name: 'inspec-4.46.13-1.pkg',
           versioncmd: 'inspec --version 2>&1 | tail -1'
       }
       # - { u: '',
