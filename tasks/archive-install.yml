@@ -70,7 +70,7 @@
       copy:
         src: "{{ mount_path }}/{{ app_basename }}"
         dest: "{{ dest }}/"
-        mode: '0644'
+        mode: preserve
         owner: "{{ target_user_id }}"
       when:
         - archive_extension == '.dmg'
@@ -84,7 +84,7 @@
         src: "{{ pkg_path }}"
         dest: "{{ dest }}"
         owner: "{{ target_user_id }}"
-        mode: '0755'
+        mode: preserve
       when:
         - archive_extension != '.dmg'
         - (installer_type == 'zip' or installer_type == 'compressed_archive')
