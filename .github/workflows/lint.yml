@@ -1,5 +1,5 @@
 ---
-name: AnsibleCI
+name: lint
 
 on:
   push:
@@ -47,20 +47,10 @@ jobs:
         run: |
           pwd
           env
-          find . -ls
-      - name: run test
+          find -ls
+      - name: yamllint
         run: |
-          cd $GITHUB_WORKSPACE/juju4.macos_apps_install && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml
-        env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
-      - name: idempotency run
+          cd $GITHUB_WORKSPACE/juju4.macos_apps_install && yamllint .
+      - name: ansible-lint
         run: |
-          cd $GITHUB_WORKSPACE/juju4.macos_apps_install && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 0)
-      - name: After script
-        run: |
-          ls -A $HOME/
-          ls -A $HOME/Downloads
-          ls /Applications
-          ls -lh /usr/local/bin/
-        continue-on-error: true
+          cd $GITHUB_WORKSPACE/juju4.macos_apps_install && ansible-lint
