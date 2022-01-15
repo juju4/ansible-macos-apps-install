@@ -47,7 +47,7 @@ jobs:
         run: |
           pwd
           env
-          find -ls
+          find . -ls
       - name: yamllint
         run: |
           cd $GITHUB_WORKSPACE/juju4.macos_apps_install && yamllint .
