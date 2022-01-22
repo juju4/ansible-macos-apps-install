@@ -68,12 +68,12 @@
       app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
 
-- include: "macos-apps-version.yml
-            version_app_path='{{ dest }}/{{ app_basename }}'
-            version_app_cmd='{{ versioncmd }}'
-            version_app_default='0.01'
-            version_app_plist_tag='{{ plist_tag }}'
-            "
+- include_tasks: macos-apps-version.yml
+  vars:
+    version_app_path: "{{ dest }}/{{ app_basename }}"
+    version_app_cmd: "{{ versioncmd }}"
+    version_app_default: "0.01"
+    version_app_plist_tag: "{{ plist_tag }}"
   when: >
     version|string and
     ((app.stat.exists is defined and app.stat.exists) or (app.skipped is defined and app.skipped)) and
@@ -129,7 +129,7 @@
     or not version|string
     or (currentversion is defined and version is version( currentversion, '>'))
 
-- include: archive-install.yml
+- import_tasks: archive-install.yml
   when: >
     (
       app.stat.exists is defined and not app.stat.exists and

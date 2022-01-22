@@ -4,6 +4,6 @@
   fail: msg="This role is only compatible with Darwin/MacOS"
   when: ansible_os_family != 'Darwin'
 
-- include: travis.yml
+- import_tasks: travis.yml
 
-- include: darwin.yml
+- import_tasks: darwin.yml
