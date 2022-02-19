@@ -101,7 +101,7 @@
         msg: "This app will be installed with super-user privileges"
     ## Note: env allow to pass variables like API_key for
     ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
-    - name: Run install of "{{ app_name }}.pkg"
+    - name: Run install of "{{ app_name }}.pkg"  # noqa no-changed-when
       command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
       failed_when: false
   when: installer_type == 'pkg' or installer_type == 'pkgonly'
@@ -114,7 +114,7 @@
       debug:
         msg: "This app will be installed as the user `{{ ansible_user_id }}`"
 
-    - name: Run interactive install of "{{ app_name }}"
+    - name: Run interactive install of "{{ app_name }}"  # noqa no-changed-when
       command: "{{ env }} open '{{ pkg_path | expanduser }}'"
       failed_when: false
   # end block
