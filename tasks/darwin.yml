@@ -1,11 +1,11 @@
 ---
 
 - name: Debug | macos_apps_install_list
-  debug: var=macos_apps_install_list
+  ansible.builtin.debug: var=macos_apps_install_list
   when: verbose|bool
 
 - name: "Ensure download directory {{ install_archives | expanduser }} exists"
-  file:
+  ansible.builtin.file:
     dest: "{{ install_archives | expanduser }}"
     state: directory
     mode: '0755'
@@ -16,12 +16,12 @@
 
 ## https://github.com/ansible/ansible/issues/18894
 - name: Check if pip available
-  stat:
+  ansible.builtin.stat:
     path: "{{ pip_path }}"
   register: has_pip
 
 - name: Bug workaround - https://github.com/ansible/ansible/issues/18894
-  pip:
+  ansible.builtin.pip:
     name:
       - requests>=2.12
       - urllib3>=1.19

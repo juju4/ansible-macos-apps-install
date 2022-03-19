@@ -3,31 +3,31 @@
 ## MIT License, Copyright (c) 2013 Michael Griffin, http://mwgriffin.com
 
 - name: Debug | archive path
-  debug:
+  ansible.builtin.debug:
     msg: "Archive Path {{ pkg_path }}"
   when: verbose|bool
 
 - name: Debug | archive extension
-  debug:
+  ansible.builtin.debug:
     msg: "Archive extension '{{ archive_extension }}'"
 
 - name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
-  stat:
+  ansible.builtin.stat:
     path: "{{ mount_path }}"
   register: mounted
   when: archive_extension == '.dmg'
 
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
 - name: Mount dmg image '{{ app_archive }}'
-  # shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
-  shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"  # noqa 306
+  # ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
+  ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"  # noqa 306
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
 - block:
     # we want the super-user to remvoe the existing app in case it was installed by another user
     - name: Remove existing app if present
-      file:
+      ansible.builtin.file:
         path: "{{ dest }}/{{ app_basename }}"
         state: absent
       when: >
@@ -38,12 +38,12 @@
 - block:
     # Actions for `installer` type
     - name: Fatal - exec_name/installer path not provided
-      fail:
+      ansible.builtin.fail:
         msg: "'exec_name' (installer name), must be set to the installer path"
       when: not installer_name|string
 
     - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
-      set_fact:
+      ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
       when: installer_name|string
   when: installer_type == 'installer'
@@ -51,23 +51,23 @@
 - block:
     # Actions for `pkg` installers contained in DMG archives
     - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
-      set_fact:
+      ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
       when: not installer_name|string
 
     - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
-      set_fact:
+      ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
       when: installer_name|string
   when: installer_type == 'pkg'
 
 - block:
     - name: INFO
-      debug:
+      ansible.builtin.debug:
         msg: "This app will be installed as the user `{{ target_user_id }}`"
 
     - name: Copy '{{ app_name }}' app to '{{ dest }}'
-      copy:
+      ansible.builtin.copy:
         src: "{{ mount_path }}/{{ app_basename }}"
         dest: "{{ dest }}/"
         mode: preserve
@@ -80,7 +80,7 @@
 
     # if the archive is a compressed file the app will be extrated directly to it's destination
     - name: Extract '{{ app_name }}' to {{ dest }}'
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ pkg_path }}"
         dest: "{{ dest }}"
         owner: "{{ target_user_id }}"
@@ -97,12 +97,12 @@
     # This block is run as super-user because pkg installation frequently contain
     # system components that require the higher provileges to be installed in system paths
     - name: INFO
-      debug:
+      ansible.builtin.debug:
         msg: "This app will be installed with super-user privileges"
     ## Note: env allow to pass variables like API_key for
     ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
     - name: Run install of "{{ app_name }}.pkg"  # noqa no-changed-when
-      command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
+      ansible.builtin.command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
       failed_when: false
   when: installer_type == 'pkg' or installer_type == 'pkgonly'
   become: True
@@ -111,11 +111,11 @@
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
 - block:
     - name: INFO
-      debug:
+      ansible.builtin.debug:
         msg: "This app will be installed as the user `{{ ansible_user_id }}`"
 
     - name: Run interactive install of "{{ app_name }}"  # noqa no-changed-when
-      command: "{{ env }} open '{{ pkg_path | expanduser }}'"
+      ansible.builtin.command: "{{ env }} open '{{ pkg_path | expanduser }}'"
       failed_when: false
   # end block
   when: installer_type == 'installer'
@@ -124,7 +124,7 @@
 # because somethims some volumes are still locked by some processes
 # for a little while after an installation
 - name: Unmount dmg image '{{ mount_path }}'
-  command: "hdiutil detach '{{ mount_path | expanduser }}'"
+  ansible.builtin.command: "hdiutil detach '{{ mount_path | expanduser }}'"
   when: archive_extension == '.dmg'
   register: unmount_result
   changed_when: False
