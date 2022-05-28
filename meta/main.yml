@@ -4,7 +4,7 @@ galaxy_info:
   author: juju4
   description: setup a list of mac applications be it dmg or pkg format, upgrade if necessary
   license: BSD
-  min_ansible_version: 2.0
+  min_ansible_version: '2.0'
   platforms:
     - name: MacOSX
       versions:

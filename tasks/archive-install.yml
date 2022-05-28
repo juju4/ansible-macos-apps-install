@@ -24,18 +24,18 @@
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
-- block:
-    # we want the super-user to remvoe the existing app in case it was installed by another user
-    - name: Remove existing app if present
-      ansible.builtin.file:
-        path: "{{ dest }}/{{ app_basename }}"
-        state: absent
-      when: >
-        (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
-        and (dest != '/Applications' or app_basename|string)
+# we want the super-user to remvoe the existing app in case it was installed by another user
+- name: Remove existing app if present
+  ansible.builtin.file:
+    path: "{{ dest }}/{{ app_basename }}"
+    state: absent
+  when: >
+    (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
+    and (dest != '/Applications' or app_basename|string)
   become: True
 
-- block:
+- name: Installer type
+  block:
     # Actions for `installer` type
     - name: Fatal - exec_name/installer path not provided
       ansible.builtin.fail:
@@ -48,7 +48,8 @@
       when: installer_name|string
   when: installer_type == 'installer'
 
-- block:
+- name: Pkg type
+  block:
     # Actions for `pkg` installers contained in DMG archives
     - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
       ansible.builtin.set_fact:
@@ -61,7 +62,8 @@
       when: installer_name|string
   when: installer_type == 'pkg'
 
-- block:
+- name: app/zip/compressed_archive type
+  block:
     - name: INFO
       ansible.builtin.debug:
         msg: "This app will be installed as the user `{{ target_user_id }}`"
@@ -93,7 +95,8 @@
   when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
 
 
-- block:
+- name: pkg/pkgonly type
+  block:
     # This block is run as super-user because pkg installation frequently contain
     # system components that require the higher provileges to be installed in system paths
     - name: INFO
@@ -109,7 +112,8 @@
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
-- block:
+- name: installer type
+  block:
     - name: INFO
       ansible.builtin.debug:
         msg: "This app will be installed as the user `{{ ansible_user_id }}`"

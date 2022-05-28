@@ -1,5 +1,7 @@
 ---
-- block:
+
+- name: Debug | verbose
+  block:
     - name: Debug | version_app_cmd
       ansible.builtin.debug: var=version_app_cmd
     - name: Debug | version_app_default
@@ -13,7 +15,8 @@
     msg: "Using custom commant to retrieve App version for '{{ version_app_path }}' from Info.plist"
   when: version_app_cmd is defined and version_app_cmd|string
 
-- block:
+- name: version_app_cmd
+  block:
     - name: Check if '{{ version_app_path }}/Contents/Info.plist' exists
       ansible.builtin.stat:
         path: "{{ version_app_path }}/Contents/Info.plist"

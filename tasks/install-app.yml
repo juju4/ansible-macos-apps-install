@@ -81,7 +81,8 @@
       app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
     )
 
-- block:
+- name: Debug | verbose
+  block:
     - name: Required version
       ansible.builtin.debug:
         var: version
