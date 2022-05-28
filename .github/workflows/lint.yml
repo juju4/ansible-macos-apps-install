@@ -4,6 +4,7 @@ name: lint
 on:
   push:
   pull_request:
+  workflow_dispatch:
   schedule:  # run weekly, every monday 04:00
     - cron: '0 4 * * 1'
 
