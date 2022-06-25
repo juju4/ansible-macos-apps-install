@@ -24,7 +24,7 @@
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
-# we want the super-user to remvoe the existing app in case it was installed by another user
+# we want the super-user to remove the existing app in case it was installed by another user
 - name: Remove existing app if present
   ansible.builtin.file:
     path: "{{ dest }}/{{ app_basename }}"
@@ -80,7 +80,7 @@
       become: True
       # become_user: "{{ target_user_id }}"
 
-    # if the archive is a compressed file the app will be extrated directly to it's destination
+    # if the archive is a compressed file the app will be extracted directly to it's destination
     - name: Extract '{{ app_name }}' to {{ dest }}'
       ansible.builtin.unarchive:
         src: "{{ pkg_path }}"
@@ -124,7 +124,7 @@
   # end block
   when: installer_type == 'installer'
 
-# this task is run asyncronously and retried various times
+# this task is run asynchronously and retried various times
 # because somethims some volumes are still locked by some processes
 # for a little while after an installation
 - name: Unmount dmg image '{{ mount_path }}'

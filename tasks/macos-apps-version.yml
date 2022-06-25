@@ -12,7 +12,7 @@
 
 - name: INFO
   ansible.builtin.debug:
-    msg: "Using custom commant to retrieve App version for '{{ version_app_path }}' from Info.plist"
+    msg: "Using custom command to retrieve App version for '{{ version_app_path }}' from Info.plist"
   when: version_app_cmd is defined and version_app_cmd|string
 
 - name: version_app_cmd
