@@ -114,7 +114,7 @@
     dest: "{{ pkg_path }}"
     mode: '0644'
     validate_certs: "{{ validate_certs }}"
-    sha256sum: "{{ omit if (checksum is not defined or not checksum|string) }}"
+    sha256sum: "{{ omit if (checksum is not defined or not (checksum | string)) }}"
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
@@ -127,7 +127,7 @@
         app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
-    or not version|string
+    or not (version | string)
     or (currentversion is defined and version is version( currentversion, '>'))
 
 - import_tasks: archive-install.yml
