@@ -17,7 +17,7 @@ It was tested on the following versions:
 Target MacOS 10.11, 10.12
 
 ### soft requirements
-GNUtar (gtar) is necessary insead of BSDtar (tar) if you will download non-zip compressed archives
+GNUtar (gtar) is necessary instead of BSDtar (tar) if you will download non-zip compressed archives
 
 ```
 brew install gnu-tar
