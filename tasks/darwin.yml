@@ -2,7 +2,7 @@
 
 - name: Debug | macos_apps_install_list
   ansible.builtin.debug: var=macos_apps_install_list
-  when: verbose|bool
+  when: verbose | bool
 
 - name: "Ensure download directory {{ install_archives | expanduser }} exists"
   ansible.builtin.file:
@@ -30,7 +30,7 @@
       - ndg-httpsclient>=0.4.2
     state: present
     executable: "{{ pip_path }}"
-  when: has_pip.stat.exists and ansible_distribution_version.split('.')[1]|int <= 11
+  when: has_pip.stat.exists and ansible_distribution_version.split('.')[1] | int <= 11
   register: pkg_result
   until: pkg_result is success
 

@@ -7,16 +7,16 @@
 - name: Define app name to '{{ app_name }}.app'
   ansible.builtin.set_fact:
     app_basename: "{{ app_name }}.app"
-  when: app_name is defined and app_name|string
+  when: app_name is defined and app_name | string
 
-- name: Define Package Path "{{ install_archives | expanduser  }}/{{ app_archive }}"
+- name: Define Package Path "{{ install_archives | expanduser }}/{{ app_archive }}"
   ansible.builtin.set_fact:
-    pkg_path: "{{ install_archives | expanduser  }}/{{ app_archive }}"
+    pkg_path: "{{ install_archives | expanduser }}/{{ app_archive }}"
 
 - name: Define installer name to '{{ installer_name }}'
   ansible.builtin.set_fact:
     app_basename: "{{ installer_name }}"
-  when: installer_name is defined and installer_name|string
+  when: installer_name is defined and installer_name | string
 
 - name: Get properties of destination
   ansible.builtin.stat:
@@ -26,43 +26,43 @@
   ansible.builtin.stat:
     path: "{{ dest }}/{{ app_name }}.app"
   register: app
-  when: version|string and (dest_properties.stat.isdir is defined and dest_properties.stat.isdir)
+  when: version | string and (dest_properties.stat.isdir is defined and dest_properties.stat.isdir)
 - name: Check if '{{ dest }}' exists - custom to'
   ansible.builtin.stat:
     path: "{{ dest }}"
   register: app2
-  when: version|string and dest != '/Applications'
+  when: version | string and dest != '/Applications'
 - name: Debug | app2
   ansible.builtin.debug: var=app2 verbosity=1
 
 - name: Debug | archives path
   ansible.builtin.debug:
     msg: "Archives Path: {{ install_archives }}'"
-  when: verbose|bool
+  when: verbose | bool
 - name: Debug | package name
   ansible.builtin.debug:
     msg: "Package Name: {{ app_archive }}'"
-  when: verbose|bool
+  when: verbose | bool
 - name: Debug | package path
   ansible.builtin.debug:
     msg: "Package Path: {{ pkg_path }}'"
-  when: verbose|bool
+  when: verbose | bool
 
 - name: INFO
   ansible.builtin.debug:
     msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
-  when: version|string
+  when: version | string
 
 - name: INFO
   ansible.builtin.debug:
     msg: "The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version"
-  when: not version|string
+  when: not version | string
 
 - name: INFO
   ansible.builtin.debug:
     msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"
   when: >
-    version|string and
+    version | string and
     app.stat.exists is defined and not app.stat.exists and
     (
       app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
@@ -93,11 +93,11 @@
 
     - name: Versions comparison
       ansible.builtin.debug:
-        var: "{{ version is version( currentversion, '>') }}"
+        var: "{{ version is version(currentversion, '>') }}"
   # end block
   when:
-    - verbose|bool
-    - version|string and (
+    - verbose | bool
+    - version | string and (
         app is defined and app.stat is defined and app.stat.exists
       )
 

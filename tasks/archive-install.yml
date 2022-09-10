@@ -5,7 +5,7 @@
 - name: Debug | archive path
   ansible.builtin.debug:
     msg: "Archive Path {{ pkg_path }}"
-  when: verbose|bool
+  when: verbose | bool
 
 - name: Debug | archive extension
   ansible.builtin.debug:
@@ -20,7 +20,7 @@
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
 - name: Mount dmg image '{{ app_archive }}'
   # ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
-  ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"  # noqa 306
+  ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"  # noqa risky-shell-pipe
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
   changed_when: False
 
@@ -31,7 +31,7 @@
     state: absent
   when: >
     (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
-    and (dest != '/Applications' or app_basename|string)
+    and (dest != '/Applications' or app_basename | string)
   become: True
 
 - name: Installer type
@@ -40,12 +40,12 @@
     - name: Fatal - exec_name/installer path not provided
       ansible.builtin.fail:
         msg: "'exec_name' (installer name), must be set to the installer path"
-      when: not installer_name|string
+      when: not installer_name | string
 
     - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
-      when: installer_name|string
+      when: installer_name | string
   when: installer_type == 'installer'
 
 - name: Pkg type
@@ -54,15 +54,15 @@
     - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
-      when: not installer_name|string
+      when: not installer_name | string
 
     - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
-      when: installer_name|string
+      when: installer_name | string
   when: installer_type == 'pkg'
 
-- name: app/zip/compressed_archive type
+- name: App/zip/compressed_archive type
   block:
     - name: INFO
       ansible.builtin.debug:
@@ -95,7 +95,7 @@
   when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
 
 
-- name: pkg/pkgonly type
+- name: Pkg/pkgonly type
   block:
     # This block is run as super-user because pkg installation frequently contain
     # system components that require the higher provileges to be installed in system paths
@@ -112,7 +112,7 @@
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
-- name: installer type
+- name: Installer type
   block:
     - name: INFO
       ansible.builtin.debug:
