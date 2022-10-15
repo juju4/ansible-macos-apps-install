@@ -11,14 +11,14 @@
   ansible.builtin.debug:
     msg: "Archive extension '{{ archive_extension }}'"
 
-- name: Check if dmg file '{{ app_archive }}' is mounted as '{{ mount_path }}'
+- name: Check if dmg file app_archive is mounted as mount_path
   ansible.builtin.stat:
     path: "{{ mount_path }}"
   register: mounted
   when: archive_extension == '.dmg'
 
 # 'yes qy| hdiutil attach' ...is used to accept EULA in DMGs that require license acceptance
-- name: Mount dmg image '{{ app_archive }}'
+- name: Mount dmg image app_archive
   # ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path | expanduser }}'"
   ansible.builtin.shell: "yes qy | hdiutil attach '{{ pkg_path }}' -mountpoint '{{ mount_path }}'"  # noqa risky-shell-pipe
   when: archive_extension == '.dmg' and mounted is defined and not mounted.stat.exists
@@ -35,6 +35,7 @@
   become: True
 
 - name: Installer type
+  when: installer_type == 'installer'
   block:
     # Actions for `installer` type
     - name: Fatal - exec_name/installer path not provided
@@ -42,33 +43,33 @@
         msg: "'exec_name' (installer name), must be set to the installer path"
       when: not installer_name | string
 
-    - name: Define Installer path "{{ mount_path }}/{{ installer_name }}"
+    - name: Define Installer path
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
       when: installer_name | string
-  when: installer_type == 'installer'
 
 - name: Pkg type
+  when: installer_type == 'pkg'
   block:
     # Actions for `pkg` installers contained in DMG archives
-    - name: Define package path inside the mountpoint to "{{ mount_path }}/{{ app_name }}.pkg"
+    - name: Define package path inside the mountpoint
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
       when: not installer_name | string
 
-    - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
+    - name: Define exec path
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
       when: installer_name | string
-  when: installer_type == 'pkg'
 
 - name: App/zip/compressed_archive type
+  when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
   block:
     - name: INFO
       ansible.builtin.debug:
         msg: "This app will be installed as the user `{{ target_user_id }}`"
 
-    - name: Copy '{{ app_name }}' app to '{{ dest }}'
+    - name: Copy app_name app to dest
       ansible.builtin.copy:
         src: "{{ mount_path }}/{{ app_basename }}"
         dest: "{{ dest }}/"
@@ -81,7 +82,7 @@
       # become_user: "{{ target_user_id }}"
 
     # if the archive is a compressed file the app will be extracted directly to it's destination
-    - name: Extract '{{ app_name }}' to {{ dest }}'
+    - name: Extract app_name to dest
       ansible.builtin.unarchive:
         src: "{{ pkg_path }}"
         dest: "{{ dest }}"
@@ -92,10 +93,10 @@
         - (installer_type == 'zip' or installer_type == 'compressed_archive')
       failed_when: false
       become: True
-  when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
-
 
 - name: Pkg/pkgonly type
+  when: installer_type == 'pkg' or installer_type == 'pkgonly'
+  become: True
   block:
     # This block is run as super-user because pkg installation frequently contain
     # system components that require the higher provileges to be installed in system paths
@@ -104,30 +105,27 @@
         msg: "This app will be installed with super-user privileges"
     ## Note: env allow to pass variables like API_key for
     ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
-    - name: Run install of "{{ app_name }}.pkg"  # noqa no-changed-when
+    - name: Run install of app_name.pkg  # noqa no-changed-when
       ansible.builtin.command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
       failed_when: false
-  when: installer_type == 'pkg' or installer_type == 'pkgonly'
-  become: True
 
 # this task cannot be escalated to super-user or target-user because it will trigger a GUI interactive installation process
 # so it is valid only if the role is used to install apps on behalf of the same user that is running the deployment
 - name: Installer type
+  when: installer_type == 'installer'
   block:
     - name: INFO
       ansible.builtin.debug:
         msg: "This app will be installed as the user `{{ ansible_user_id }}`"
 
-    - name: Run interactive install of "{{ app_name }}"  # noqa no-changed-when
+    - name: Run interactive install of app_name  # noqa no-changed-when
       ansible.builtin.command: "{{ env }} open '{{ pkg_path | expanduser }}'"
       failed_when: false
-  # end block
-  when: installer_type == 'installer'
 
 # this task is run asynchronously and retried various times
 # because somethims some volumes are still locked by some processes
 # for a little while after an installation
-- name: Unmount dmg image '{{ mount_path }}'
+- name: Unmount dmg image
   ansible.builtin.command: "hdiutil detach '{{ mount_path | expanduser }}'"
   when: archive_extension == '.dmg'
   register: unmount_result

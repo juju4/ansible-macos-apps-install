@@ -1,14 +1,17 @@
 ---
 
 - name: Debug | verbose
+  when: verbose is defined and verbose
   block:
     - name: Debug | version_app_cmd
-      ansible.builtin.debug: var=version_app_cmd
+      ansible.builtin.debug:
+        var: version_app_cmd
     - name: Debug | version_app_default
-      ansible.builtin.debug: var=version_app_default
+      ansible.builtin.debug:
+        var: version_app_default
     - name: Debug | version_app_plist_tag
-      ansible.builtin.debug: var=version_app_plist_tag
-  when: verbose is defined and verbose
+      ansible.builtin.debug:
+        var: version_app_plist_tag
 
 - name: INFO
   ansible.builtin.debug:
@@ -16,13 +19,14 @@
   when: version_app_cmd is defined and version_app_cmd | string
 
 - name: Version_app_cmd
+  when: version_app_cmd is not defined or not version_app_cmd | string
   block:
-    - name: Check if '{{ version_app_path }}/Contents/Info.plist' exists
+    - name: Check if Contents/Info.plist exists
       ansible.builtin.stat:
         path: "{{ version_app_path }}/Contents/Info.plist"
       register: infoplist
 
-    - name: Define command to retrieve App version for '{{ version_app_path }}' from Info.plist
+    - name: Define command to retrieve App version from Info.plist for {{ version_app_path }}
       ansible.builtin.set_fact:
         version_app_cmd: "/usr/libexec/PlistBuddy -c 'print :{{ version_app_plist_tag }}'  '{{ version_app_path }}/Contents/Info.plist'"
       when: infoplist.stat.exists
@@ -32,8 +36,6 @@
         version_app_cmd: "echo {{ version_app_default }}"
       when: not infoplist.stat.exists
 
-  when: version_app_cmd is not defined or not version_app_cmd | string
-
 - name: Get current App version of {{ version_app_path }}
   ansible.builtin.command: "{{ version_app_cmd }}"
   register: version_app_shell
@@ -41,12 +43,12 @@
   ignore_errors: True
   when: app.stat.exists and version_app_cmd | string
 
-- name: The current App version is '{{ version_app_shell.stdout }}'
+- name: The current App version is {{ version_app_shell.stdout }}
   ansible.builtin.set_fact:
     currentversion: "{{ version_app_shell.stdout }}"
   when: version_app_shell.stdout is defined and version_app_shell.stdout
 
-- name: The current App version is '{{ version_app_default }}'
+- name: The current App version is {{ version_app_default }}
   ansible.builtin.set_fact:
     currentversion: "{{ version_app_default }}"
   when: not (version_app_shell.stdout is defined and version_app_shell.stdout)

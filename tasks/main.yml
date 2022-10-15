@@ -1,9 +1,12 @@
 ---
 
 - name: FATAL
-  ansible.builtin.fail: msg="This role is only compatible with Darwin/MacOS"
+  ansible.builtin.fail:
+    msg: "This role is only compatible with Darwin/MacOS"
   when: ansible_os_family != 'Darwin'
 
-- import_tasks: travis.yml
+- name: Import travis
+  ansible.builtin.import_tasks: travis.yml
 
-- import_tasks: darwin.yml
+- name: Import darwin
+  ansible.builtin.import_tasks: darwin.yml

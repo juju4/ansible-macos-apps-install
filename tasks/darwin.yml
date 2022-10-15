@@ -1,10 +1,11 @@
 ---
 
 - name: Debug | macos_apps_install_list
-  ansible.builtin.debug: var=macos_apps_install_list
+  ansible.builtin.debug:
+    var: macos_apps_install_list
   when: verbose | bool
 
-- name: "Ensure download directory {{ install_archives | expanduser }} exists"
+- name: Ensure user download directory exists
   ansible.builtin.file:
     dest: "{{ install_archives | expanduser }}"
     state: directory
@@ -35,15 +36,15 @@
   until: pkg_result is success
 
 - name: Install macOS applications
-  include_tasks: install-app.yml
+  ansible.builtin.include_tasks: install-app.yml
   vars:
     app_url: "{{ item.u }}"
     app_archive: "{{ item.f | default(item.u | basename) }}"
-    archive_extension: "{{ app_archive|default('') | splitext |  last }}"
+    archive_extension: "{{ app_archive | default('') | splitext | last }}"
     validate_certs: "{{ item.v | default(True) }}"
     checksum: "{{ item.s | default('') }}"
     app_name: "{{ item.n }}"
-    installer_type: "{{ item.t|default('app') }}"
+    installer_type: "{{ item.t | default('app') }}"
     mount_path: "{{ item.m | default('/Volumes/' + item.n) }}"
     version: "{{ item.version | default('') }}"
     versioncmd: "{{ item.versioncmd | default('') }}"
