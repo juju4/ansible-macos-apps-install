@@ -13,18 +13,18 @@ repos:
       - id: double-quote-string-fixer
       - id: requirements-txt-fixer
   - repo: https://github.com/ansible-community/ansible-lint.git
-    rev: v6.5.2
+    rev: v6.8.2
     hooks:
       - id: ansible-lint
         files: \.(yaml|yml)$
   - repo: git@github.com:Yelp/detect-secrets
-    rev: v1.3.0
+    rev: v1.4.0
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
         # exclude: .*/tests/.*
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.1
+    rev: v2.2.2
     hooks:
       - id: codespell
         args: [-I, .codespellignore]
