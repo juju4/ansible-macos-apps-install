@@ -116,7 +116,7 @@
     dest: "{{ pkg_path }}"
     mode: '0644'
     validate_certs: "{{ validate_certs }}"
-    sha256sum: "{{ omit if (checksum is not defined or not (checksum | string)) }}"
+    checksum: "{{ checksum | default(omit) }}"
     tmp_dest: /tmp/
   vars:
     ansible_python_interpreter: python3
