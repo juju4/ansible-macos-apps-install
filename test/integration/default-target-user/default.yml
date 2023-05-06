@@ -1,6 +1,7 @@
 ---
 
-- hosts: all
+- name: Test integration playbook
+  hosts: all
   vars:
     verbose: True
     new_user_username: 'targetuser'
@@ -199,7 +200,7 @@
       # }
   pre_tasks:
     - name: Macos 11 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
           - { u: 'https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-11-BigSur.pkg',
@@ -212,7 +213,7 @@
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[0] == '11'
     - name: Macos 10.15 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
           - { u: 'https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-10.15-Catalina.pkg',
@@ -225,7 +226,7 @@
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '15'
     - name: Macos 10.14 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
           - { u: 'https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-10.14-Mojave.pkg',
@@ -238,7 +239,7 @@
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '14'
     - name: Macos 10.13 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
           - { u: 'https://distfiles.macports.org/MacPorts/MacPorts-2.6.3-10.13-HighSierra.pkg',
@@ -251,7 +252,7 @@
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '13'
     - name: Macos 10.12 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
           - { u: 'https://distfiles.macports.org/MacPorts/MacPorts-2.6.3-10.12-Sierra.pkg',
@@ -264,7 +265,7 @@
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '12'
     - name: Macos 10.11 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         macos_apps_install_list:
           - "{{ macos_apps_install_list }}"
           - { u: 'https://distfiles.macports.org/MacPorts/MacPorts-2.6.3-10.11-ElCapitan.pkg',
@@ -278,7 +279,7 @@
           }
       when: ansible_distribution == 'MacOSX' and ansible_distribution_version.split('.')[1] == '11'
     - name: Creating user "{{ new_user_username }}".
-      user:
+      ansible.builtin.user:
         name: "{{ new_user_username }}"
         comment: "{{ new_user_fullname }}"
         password: "{{ new_user_password_cleartext }}"
