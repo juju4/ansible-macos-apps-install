@@ -77,7 +77,7 @@ macos_apps_install_list:
     }
 
 ```
-## Notes on Veriables
+## Notes on Variables
 ### Installer Types: `t:`
 > default: app
 
