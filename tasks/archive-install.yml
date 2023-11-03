@@ -75,6 +75,7 @@
         dest: "{{ dest }}/"
         mode: preserve
         owner: "{{ target_user_id }}"
+        remote_src: True
       when:
         - archive_extension == '.dmg'
         - installer_type == 'app'
