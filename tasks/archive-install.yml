@@ -100,7 +100,7 @@
   become: True
   block:
     # This block is run as super-user because pkg installation frequently contain
-    # system components that require the higher provileges to be installed in system paths
+    # system components that require the higher privileges to be installed in system paths
     - name: INFO
       ansible.builtin.debug:
         msg: "This app will be installed with super-user privileges"
