@@ -119,18 +119,6 @@
       #     versioncmd: '/usr/libexec/PlistBuddy -c "print :CFBundleShortVersionString" /Applications/Docker.app/Contents/Info.plist',
       #     to: '/Applications/Docker.app'
       # }
-      # https://preyproject.com/download/
-      ## http://help.preyproject.com/article/188-prey-unattended-install-for-computers
-      - { u: 'https://downloads.preyproject.com/prey-client-releases/node-client/1.9.5/prey-mac-1.9.5-x64.pkg',
-          v: False,
-          s: 'sha256:84e00adf58f85d634f921f5bb9224d22f68789b1e0bff64d3fd2d154c85ce06c',
-          n: 'Prey',
-          t: 'pkgonly',
-          version: '1.9.5',
-          env: "env API_KEY={{ prey_apikey | default('') }}",
-          to: '/usr/local/lib/prey/current/bin/prey',
-          versioncmd: '/usr/local/lib/prey/current/bin/prey --version'
-      }
       # https://github.com/osxfuse/osxfuse/releases/
       ## osxfuse is required for veracrypt
       - { u: 'https://github.com/osxfuse/osxfuse/releases/download/macfuse-4.2.1/macfuse-4.2.1.dmg',
