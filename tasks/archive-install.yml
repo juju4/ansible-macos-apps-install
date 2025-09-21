@@ -31,7 +31,7 @@
     state: absent
   when: >
     (installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive')
-    and (dest != '/Applications' or app_basename | string)
+    and (dest != '/Applications' or app_basename | length > 0)
   become: True
 
 - name: Installer type
@@ -41,12 +41,12 @@
     - name: Fatal - exec_name/installer path not provided
       ansible.builtin.fail:
         msg: "'exec_name' (installer name), must be set to the installer path"
-      when: not installer_name | string
+      when: not (installer_name | length > 0)
 
     - name: Define Installer path
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
-      when: installer_name | string
+      when: installer_name | length > 0
 
 - name: Pkg type
   when: installer_type == 'pkg'
@@ -55,12 +55,12 @@
     - name: Define package path inside the mountpoint
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ app_name }}.pkg"
-      when: not installer_name | string
+      when: not (installer_name | length > 0)
 
     - name: Define exec path
       ansible.builtin.set_fact:
         pkg_path: "{{ mount_path }}/{{ installer_name }}"
-      when: installer_name | string
+      when: installer_name | length > 0
 
 - name: App/zip/compressed_archive type
   when: installer_type == 'app' or installer_type == 'zip' or installer_type == 'compressed_archive'
