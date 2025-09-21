@@ -1,7 +1,7 @@
 ---
 
 - name: Debug | verbose
-  when: verbose is defined and verbose
+  when: verbose is defined and verbose | bool
   block:
     - name: Debug | version_app_cmd
       ansible.builtin.debug:
@@ -16,10 +16,12 @@
 - name: INFO
   ansible.builtin.debug:
     msg: "Using custom command to retrieve App version for '{{ version_app_path }}' from Info.plist"
-  when: version_app_cmd is defined and version_app_cmd | string
+  when:
+    - version_app_cmd is defined
+    - version_app_cmd | length > 0
 
 - name: Version_app_cmd
-  when: version_app_cmd is not defined or not version_app_cmd | string
+  when: version_app_cmd is not defined or not (version_app_cmd | length > 0)
   block:
     - name: Check if Contents/Info.plist exists
       ansible.builtin.stat:
@@ -41,14 +43,14 @@
   register: version_app_shell
   changed_when: False
   ignore_errors: True
-  when: app.stat.exists and version_app_cmd | string
+  when: app.stat.exists and version_app_cmd | length > 0
 
 - name: The current App version is {{ version_app_shell.stdout }}
   ansible.builtin.set_fact:
     currentversion: "{{ version_app_shell.stdout }}"
-  when: version_app_shell.stdout is defined and version_app_shell.stdout
+  when: version_app_shell.stdout is defined and version_app_shell.stdout | length > 0
 
 - name: The current App version is {{ version_app_default }}
   ansible.builtin.set_fact:
     currentversion: "{{ version_app_default }}"
-  when: not (version_app_shell.stdout is defined and version_app_shell.stdout)
+  when: not (version_app_shell.stdout is defined and version_app_shell.stdout | length > 0)
