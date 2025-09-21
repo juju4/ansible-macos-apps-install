@@ -101,7 +101,7 @@
 
     - name: Versions comparison
       ansible.builtin.debug:
-        var: "{{ version is version(currentversion, '>') | string }}"
+        msg: "{{ version is version(currentversion, '>') | string }}"
 
 - name: Already up-to-date!
   ansible.builtin.debug:
