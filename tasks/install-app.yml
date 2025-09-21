@@ -7,7 +7,9 @@
 - name: Define app name to
   ansible.builtin.set_fact:
     app_basename: "{{ app_name }}.app"
-  when: app_name is defined and app_name | string
+  when:
+    - app_name is defined
+    - app_name | length > 0
 
 - name: Define Package Path
   ansible.builtin.set_fact:
@@ -16,7 +18,9 @@
 - name: Define installer name
   ansible.builtin.set_fact:
     app_basename: "{{ installer_name }}"
-  when: installer_name is defined and installer_name | string
+  when:
+    - installer_name is defined
+    - installer_name | length > 0
 
 - name: Get properties of destination
   ansible.builtin.stat:
@@ -53,22 +57,20 @@
 - name: INFO
   ansible.builtin.debug:
     msg: "The desired version for '{{ app_name }}' is '{{ version }}'"
-  when: version | string
+  when: version | length > 0
 
 - name: INFO
   ansible.builtin.debug:
     msg: "The desired version for '{{ app_name }}' was not specified. Will overwrite any existing version"
-  when: not version | string
+  when: version | length <= 0
 
 - name: INFO
   ansible.builtin.debug:
     msg: "'{{ app_basename }}' does not exist in '{{ dest }}'. '{{ app_name }}' will be installed"
-  when: >
-    version | string and
-    app.stat.exists is defined and not app.stat.exists and
-    (
-      app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
-    )
+  when:
+    - version | length > 0
+    - app.stat.exists is defined and not app.stat.exists
+    - (app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists))
 
 - name: Import macos-apps-version
   ansible.builtin.include_tasks: macos-apps-version.yml
@@ -77,17 +79,15 @@
     version_app_cmd: "{{ versioncmd }}"
     version_app_default: "0.01"
     version_app_plist_tag: "{{ plist_tag }}"
-  when: >
-    version|string and
-    ((app.stat.exists is defined and app.stat.exists) or (app.skipped is defined and app.skipped)) and
-    (
-      app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
-    )
+  when:
+    - version | length > 0
+    - ((app.stat.exists is defined and app.stat.exists) or (app.skipped is defined and app.skipped))
+    - (app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists))
 
 - name: Debug | verbose
   when:
     - verbose | bool
-    - version | string and (
+    - version | length > 0 and (
         app is defined and app.stat is defined and app.stat.exists
       )
   block:
@@ -106,9 +106,9 @@
 - name: Already up-to-date!
   ansible.builtin.debug:
     msg: "Application {{ app_name }} already up-to-date (Current {{ currentversion }} >= Desired {{ version }})"
-  when: >
-    app.stat.exists is defined and app.stat.exists and
-    version|string and version is version( currentversion, '<=')
+  when:
+    - app.stat.exists is defined and app.stat.exists
+    - version | length > 0 and version is version( currentversion, '<=')
 
 - name: Download macOS App archive {{ app_archive }}
   ansible.builtin.get_url:
@@ -129,7 +129,7 @@
         app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
-    or not (version | string)
+    or not (version | length > 0)
     or (currentversion is defined and version is version( currentversion, '>'))
 
 - name: Import archive-install
@@ -141,5 +141,5 @@
         app2.stat.exists is not defined or (app2.stat.exists is defined and not app2.stat.exists)
       )
     )
-    or not version|string
+    or not (version | length > 0)
     or (currentversion is defined and version is version( currentversion, '>'))
