@@ -6,4 +6,4 @@
     pip_path: /usr/local/bin/pip
   ## this is not passed into ansible on osx
   #  when: ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'True'
-  when: ansible_env['SUDO_USER'] is defined and ansible_env['SUDO_USER'] == 'travis'
+  when: ansible_facts['env']['SUDO_USER'] is defined and ansible_facts['env']['SUDO_USER'] == 'travis'
