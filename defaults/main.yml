@@ -1,7 +1,7 @@
 ---
 
 verbose: False
-target_user_id: "{{ ansible_user_id }}"
+target_user_id: "{{ ansible_facts['user_id'] }}"
 install_archives: /private/var/_install
 remove_archives_after_install: False
 pip_path: /opt/local/bin/pip  ## macports
