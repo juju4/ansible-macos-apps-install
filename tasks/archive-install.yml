@@ -117,7 +117,7 @@
   block:
     - name: INFO
       ansible.builtin.debug:
-        msg: "This app will be installed as the user `{{ ansible_user_id }}`"
+        msg: "This app will be installed as the user `{{ ansible_facts['user_id'] }}`"
 
     - name: Run interactive install of app_name  # noqa no-changed-when
       ansible.builtin.command: "{{ env }} open '{{ pkg_path | expanduser }}'"
