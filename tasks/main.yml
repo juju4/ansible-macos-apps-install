@@ -3,7 +3,7 @@
 - name: FATAL
   ansible.builtin.fail:
     msg: "This role is only compatible with Darwin/MacOS"
-  when: ansible_os_family != 'Darwin'
+  when: ansible_facts['os_family'] != 'Darwin'
 
 - name: Import travis
   ansible.builtin.import_tasks: travis.yml
