@@ -160,17 +160,6 @@
       #     v: False,
       #     s: 'sha256:xxx'
       # }
-      # https://downloads.chef.io/products/inspec
-      - { u: 'https://packages.chef.io/files/stable/inspec/4.46.13/mac_os_x/11/inspec-4.46.13-1.x86_64.dmg',
-          v: true,
-          s: 'sha256:cf117764cd1e67ef4d161d6ad8bd0e713d25d2e6afaaea0d734e6707eccd2e58',
-          n: 'inspec',
-          t: 'pkg',
-          m: '/Volumes/InSpec',
-          version: '4.46.13',
-          exec_name: 'inspec-4.46.13-1.pkg',
-          versioncmd: 'inspec --version 2>&1 | tail -1'
-      }
       # - { u: '',
       #     f: '',
       #     v: True,
