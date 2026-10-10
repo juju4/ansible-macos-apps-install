@@ -1,7 +1,7 @@
-[![Actions Status - Master](https://github.com/juju4/ansible-macos-apps-install/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-macos-apps-install/actions?query=branch%3Amaster)
-[![Actions Status - Devel](https://github.com/juju4/ansible-macos-apps-install/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-macos-apps-install/actions?query=branch%3Adevel)
-
 # MacOS Applications installation ansible role
+
+[![Actions Status - Main](https://github.com/juju4/ansible-macos-apps-install/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-macos-apps-install/actions?query=branch%3Amain)
+[![Actions Status - Devel](https://github.com/juju4/ansible-macos-apps-install/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-macos-apps-install/actions?query=branch%3Adevel)
 
 Ansible role to setup a list of mac applications be it dmg or pkg format.
 It is idempotent and will only update application if version is higher than current one (if relevant fields are present)
